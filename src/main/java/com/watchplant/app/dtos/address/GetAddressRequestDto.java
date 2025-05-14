@@ -7,26 +7,25 @@ package com.watchplant.app.dtos.address;
 import java.util.UUID;
 
 /**
- *
- * @author pedro
+ * DTO for fetching an address by ID.
  */
 public class GetAddressRequestDto {
 
   private UUID id;
 
   /**
-   * Constructor for GetAddressRequestDto
+   * Constructor for GetAddressRequestDto.
    *
-   * @param id The id of the address
+   * @param id The ID of the address to fetch.
    */
   public GetAddressRequestDto(UUID id) {
     this.id = id;
   }
 
   /**
-   * Gets the id of the address
+   * Gets the ID of the address.
    *
-   * @return The id of the address
+   * @return The ID of the address.
    */
   public UUID getId() {
     return id;

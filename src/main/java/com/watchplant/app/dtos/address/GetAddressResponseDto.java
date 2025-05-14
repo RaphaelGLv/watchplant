@@ -8,8 +8,8 @@ import com.watchplant.app.entities.Address;
 import java.util.UUID;
 
 /**
- *
- * @author pedro
+ * DTO for the response of fetching an address.
+ * Contains the details of the fetched address.
  */
 public class GetAddressResponseDto {
 
@@ -20,9 +20,9 @@ public class GetAddressResponseDto {
   private String neighborhood;
 
   /**
-   * Constructor for GetAddressResponseDto
+   * Constructor for GetAddressResponseDto.
    *
-   * @param address The address to be retrieved
+   * @param address The fetched address.
    */
   public GetAddressResponseDto(Address address) {
     this.id = address.getId();
@@ -33,45 +33,45 @@ public class GetAddressResponseDto {
   }
 
   /**
-   * Gets the id of the address
+   * Gets the ID of the address.
    *
-   * @return The id of the address
+   * @return The ID of the address.
    */
   public UUID getId() {
     return id;
   }
 
   /**
-   * Gets the zip code of the address
+   * Gets the zip code of the address.
    *
-   * @return The zip code of the address
+   * @return The zip code of the address.
    */
   public String getZipCode() {
     return zipCode;
   }
 
   /**
-   * Gets the street of the address
+   * Gets the street of the address.
    *
-   * @return The street of the address
+   * @return The street of the address.
    */
   public String getStreet() {
     return street;
   }
 
   /**
-   * Gets the number of the address
+   * Gets the number of the address.
    *
-   * @return The number of the address
+   * @return The number of the address.
    */
   public String getNumber() {
     return number;
   }
 
   /**
-   * Gets the neighborhood of the address
+   * Gets the neighborhood of the address.
    *
-   * @return The neighborhood of the address
+   * @return The neighborhood of the address.
    */
   public String getNeighborhood() {
     return neighborhood;
