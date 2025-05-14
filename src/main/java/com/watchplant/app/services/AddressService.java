@@ -4,8 +4,6 @@
  */
 package com.watchplant.app.services;
 
-import org.springframework.stereotype.Service;
-
 import com.watchplant.app.dtos.address.CreateAddressRequestDto;
 import com.watchplant.app.dtos.address.CreateAddressResponseDto;
 import com.watchplant.app.dtos.address.GetAddressRequestDto;
@@ -13,6 +11,8 @@ import com.watchplant.app.dtos.address.GetAddressResponseDto;
 import com.watchplant.app.dtos.address.UpdateAddressRequestDto;
 import com.watchplant.app.dtos.address.UpdateAddressResponseDto;
 import com.watchplant.app.entities.Address;
+import com.watchplant.app.repositories.AddressRepository;
+import org.springframework.stereotype.Service;
 
 /**
  *
@@ -21,14 +21,15 @@ import com.watchplant.app.entities.Address;
 @Service
 public class AddressService {
 
-  public GetAddressResponseDto getAddress(GetAddressRequestDto requestBody) {
-    // TODO Find the address by id (not implemented in this example)
-    String zipCode = "12345-678";
-    String street = "Main St";
-    String number = "123";
-    String neighborhood = "Downtown";
+  private AddressRepository addressRepository;
 
-    Address address = new Address(zipCode, street, number, neighborhood);
+  public GetAddressResponseDto getAddress(GetAddressRequestDto requestBody) {
+    Address address = addressRepository
+      .findById(requestBody.getId())
+      .orElse(null);
+    if (address == null) {
+      throw new IllegalArgumentException("Address not found");
+    }
     return new GetAddressResponseDto(address);
   }
 
@@ -41,7 +42,8 @@ public class AddressService {
       requestBody.getNumber(),
       requestBody.getNeighborhood()
     );
-    // TODO Save the address to the database (not implemented in this example)
+
+    addressRepository.save(address);
 
     return new CreateAddressResponseDto(address);
   }
@@ -49,25 +51,29 @@ public class AddressService {
   public UpdateAddressResponseDto updateAddress(
     UpdateAddressRequestDto requestBody
   ) {
-    // TODO Find the address by id and update it (not implemented in this example)
+    Address address = addressRepository
+      .findById(requestBody.getId())
+      .orElse(null);
+    if (address == null) {
+      throw new IllegalArgumentException("Address not found");
+    }
     String zipCode = requestBody.getZipCode().orElse(null);
     String street = requestBody.getStreet().orElse(null);
     String number = requestBody.getNumber().orElse(null);
     String neighborhood = requestBody.getNeighborhood().orElse(null);
     if (zipCode != null) {
-      // Update the zip code
+      address.setZipCode(zipCode);
     }
     if (street != null) {
-      // Update the street
+      address.setStreet(street);
     }
     if (number != null) {
-      // Update the number
+      address.setNumber(number);
     }
     if (neighborhood != null) {
-      // Update the neighborhood
+      address.setNeighborhood(neighborhood);
     }
-    // TODO Save the updated address to the database (not implemented in this example)
-    Address address = new Address(zipCode, street, number, neighborhood);
+    addressRepository.save(address);
     return new UpdateAddressResponseDto(address);
   }
 }
