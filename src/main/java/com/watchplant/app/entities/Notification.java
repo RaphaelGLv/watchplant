@@ -5,6 +5,7 @@
 package com.watchplant.app.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 /**
  *
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  */
 public class Notification {
 
+  private UUID id;
   private LocalDateTime creationDate;
   private String message;
   private boolean isSeen;
@@ -37,10 +39,19 @@ public class Notification {
     if (message == null || message.isEmpty()) {
       throw new IllegalArgumentException("Message cannot be null or empty");
     }
+    this.id = UUID.randomUUID();
     this.creationDate = creationDate;
     this.message = message;
     this.isSeen = isSeen;
     this.type = type;
+  }
+
+  /**
+   * Gets the ID of the notification
+   * @return The ID of the notification
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
