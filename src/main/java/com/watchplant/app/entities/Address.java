@@ -4,12 +4,15 @@
  */
 package com.watchplant.app.entities;
 
+import java.util.UUID;
+
 /**
  *
  * @author pedro
  */
 public class Address {
 
+  private UUID id;
   private String zipCode;
   private String street;
   private String number;
@@ -43,10 +46,19 @@ public class Address {
         "Neighborhood cannot be null or empty"
       );
     }
+    this.id = UUID.randomUUID();
     this.zipCode = zipCode;
     this.street = street;
     this.number = number;
     this.neighborhood = neighborhood;
+  }
+
+  /**
+   * Gets the id of the address
+   * @return The id of the address
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
