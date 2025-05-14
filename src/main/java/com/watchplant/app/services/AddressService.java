@@ -23,6 +23,12 @@ public class AddressService {
 
   private AddressRepository addressRepository;
 
+  /**
+   * Gets the address by id
+   * @param requestBody
+   * @return {@link GetAddressResponseDto} containing the address
+   * @throws IllegalArgumentException if the address is not found
+   */
   public GetAddressResponseDto getAddress(GetAddressRequestDto requestBody) {
     Address address = addressRepository
       .findById(requestBody.getId())
@@ -33,6 +39,12 @@ public class AddressService {
     return new GetAddressResponseDto(address);
   }
 
+  /**
+   * Creates a new address
+   * @param requestBody
+   * @return {@link CreateAddressResponseDto} containing the created address
+   * @throws IllegalArgumentException if the address is not found
+   */
   public CreateAddressResponseDto createAddress(
     CreateAddressRequestDto requestBody
   ) {
@@ -48,6 +60,12 @@ public class AddressService {
     return new CreateAddressResponseDto(address);
   }
 
+  /**
+   * Updates an existing address
+   * @param requestBody
+   * @return {@link UpdateAddressResponseDto} containing the updated address
+   * @throws IllegalArgumentException if the address is not found
+   */
   public UpdateAddressResponseDto updateAddress(
     UpdateAddressRequestDto requestBody
   ) {
