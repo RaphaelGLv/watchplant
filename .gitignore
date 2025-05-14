@@ -1,0 +1,33 @@
+# Maven target directory
+/target/
+
+# Logs
+*.log
+logs/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Application properties (if sensitive information is stored)
+src/main/resources/application.properties
+
+# Compiled class files
+*.class
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+
+# Generated files
+*.jar
+*.war
+*.ear
+
+# NetBeans-specific files
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
