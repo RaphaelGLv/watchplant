@@ -4,15 +4,20 @@
  */
 package com.watchplant.app.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.util.UUID;
 
 /**
  *
  * @author pedro
  */
+@Entity
 public class Address {
 
+  @Id
   private UUID id;
+
   private String zipCode;
   private String street;
   private String number;

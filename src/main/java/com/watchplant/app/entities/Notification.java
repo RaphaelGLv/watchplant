@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -11,9 +13,12 @@ import java.util.UUID;
  *
  * @author pedro
  */
+@Entity
 public class Notification {
 
+  @Id
   private UUID id;
+
   private LocalDateTime creationDate;
   private String message;
   private boolean isSeen;

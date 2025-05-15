@@ -6,15 +6,20 @@ package com.watchplant.app.entities;
 
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.util.UUID;
 
 /**
  *
  * @author pedro
  */
+@Entity
 public class Plantation {
 
+  @Id
   private UUID id;
+
   private String name;
   private Double sizeArea;
   private SoilTypeEnum soilType;

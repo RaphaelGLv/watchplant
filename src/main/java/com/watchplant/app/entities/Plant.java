@@ -9,15 +9,20 @@ import com.watchplant.app.enums.PlantCycleEnum;
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
 import com.watchplant.app.enums.WateringFrequencyEnum;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import java.util.UUID;
 
 /**
  *
  * @author pedro
  */
+@Entity
 public class Plant {
 
+  @Id
   private UUID id;
+
   private String scientificName;
   private String commonName;
   private Double maxFeetHeight;

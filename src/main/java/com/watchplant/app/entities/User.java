@@ -4,11 +4,19 @@
  */
 package com.watchplant.app.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.util.UUID;
+
 /**
  *
  * @author pedro
  */
+@Entity
 public class User {
+
+  @Id
+  private UUID id;
 
   private String name;
   private String email;
@@ -31,9 +39,18 @@ public class User {
     if (phone == null || phone.isEmpty()) {
       throw new IllegalArgumentException("Phone cannot be null or empty");
     }
+    this.id = UUID.randomUUID();
     this.name = name;
     this.email = email;
     this.phone = phone;
+  }
+
+  /**
+   * Gets the ID of the user
+   * @return The ID of the user
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
