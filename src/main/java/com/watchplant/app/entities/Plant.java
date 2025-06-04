@@ -9,12 +9,19 @@ import com.watchplant.app.enums.PlantCycleEnum;
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
 import com.watchplant.app.enums.WateringFrequencyEnum;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.util.UUID;
 
 /**
  *
  * @author pedro
  */
+@Entity
 public class Plant {
+
+  @Id
+  private UUID id;
 
   private String scientificName;
   private String commonName;
@@ -41,18 +48,32 @@ public class Plant {
    * @param careLevel The care level required for the plant
    * @throws IllegalArgumentException if scientificName or commonName is null or empty, or if maxFeetHeight is null or negative
    */
-  public Plant(String scientificName, String commonName, Double maxFeetHeight, PlantCycleEnum cycle,
-               WateringFrequencyEnum wateringFrequency, SunlightIncidenceEnum sunlightIncidence, int pruningMonth,
-               int pruningCountYearly, SoilTypeEnum soilType, CareLevelEnum careLevel) {
+  public Plant(
+    String scientificName,
+    String commonName,
+    Double maxFeetHeight,
+    PlantCycleEnum cycle,
+    WateringFrequencyEnum wateringFrequency,
+    SunlightIncidenceEnum sunlightIncidence,
+    int pruningMonth,
+    int pruningCountYearly,
+    SoilTypeEnum soilType,
+    CareLevelEnum careLevel
+  ) {
     if (scientificName == null || scientificName.isEmpty()) {
-      throw new IllegalArgumentException("Scientific name cannot be null or empty");
+      throw new IllegalArgumentException(
+        "Scientific name cannot be null or empty"
+      );
     }
     if (commonName == null || commonName.isEmpty()) {
       throw new IllegalArgumentException("Common name cannot be null or empty");
     }
     if (maxFeetHeight == null || maxFeetHeight < 0) {
-      throw new IllegalArgumentException("Max feet height cannot be null or negative");
+      throw new IllegalArgumentException(
+        "Max feet height cannot be null or negative"
+      );
     }
+    this.id = UUID.randomUUID();
     this.scientificName = scientificName;
     this.commonName = commonName;
     this.maxFeetHeight = maxFeetHeight;
@@ -63,6 +84,14 @@ public class Plant {
     this.pruningCountYearly = pruningCountYearly;
     this.soilType = soilType;
     this.careLevel = careLevel;
+  }
+
+  /**
+   * Gets the ID of the plant
+   * @return The ID of the plant
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -80,7 +109,9 @@ public class Plant {
    */
   public void setScientificName(String scientificName) {
     if (scientificName == null || scientificName.isEmpty()) {
-      throw new IllegalArgumentException("Scientific name cannot be null or empty");
+      throw new IllegalArgumentException(
+        "Scientific name cannot be null or empty"
+      );
     }
     this.scientificName = scientificName;
   }
@@ -120,7 +151,9 @@ public class Plant {
    */
   public void setMaxFeetHeight(Double maxFeetHeight) {
     if (maxFeetHeight == null || maxFeetHeight < 0) {
-      throw new IllegalArgumentException("Max feet height cannot be null or negative");
+      throw new IllegalArgumentException(
+        "Max feet height cannot be null or negative"
+      );
     }
     this.maxFeetHeight = maxFeetHeight;
   }

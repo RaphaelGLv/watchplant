@@ -4,11 +4,19 @@
  */
 package com.watchplant.app.entities;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.util.UUID;
+
 /**
  *
  * @author pedro
  */
+@Entity
 public class UserAccount {
+
+  @Id
+  private UUID id;
 
   private String email;
   private String password;
@@ -31,9 +39,18 @@ public class UserAccount {
     if (loginTries < 0) {
       throw new IllegalArgumentException("Login tries cannot be negative");
     }
+    this.id = UUID.randomUUID();
     this.email = email;
     this.password = password;
     this.loginTries = loginTries;
+  }
+
+  /**
+   * Gets the ID of the user account
+   * @return The ID of the user account
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**

@@ -6,12 +6,19 @@ package com.watchplant.app.entities;
 
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import java.util.UUID;
 
 /**
  *
  * @author pedro
  */
+@Entity
 public class Plantation {
+
+  @Id
+  private UUID id;
 
   private String name;
   private Double sizeArea;
@@ -26,17 +33,33 @@ public class Plantation {
    * @param sunlightIncidence The sunlight incidence of the plantation
    * @throws IllegalArgumentException if name is null or empty, or if sizeArea is null or negative
    */
-  public Plantation(String name, Double sizeArea, SoilTypeEnum soilType, SunlightIncidenceEnum sunlightIncidence) {
+  public Plantation(
+    String name,
+    Double sizeArea,
+    SoilTypeEnum soilType,
+    SunlightIncidenceEnum sunlightIncidence
+  ) {
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Name cannot be null or empty");
     }
     if (sizeArea == null || sizeArea < 0) {
-      throw new IllegalArgumentException("Size area cannot be null or negative");
+      throw new IllegalArgumentException(
+        "Size area cannot be null or negative"
+      );
     }
+    this.id = UUID.randomUUID();
     this.name = name;
     this.sizeArea = sizeArea;
     this.soilType = soilType;
     this.sunlightIncidence = sunlightIncidence;
+  }
+
+  /**
+   * Gets the ID of the plantation
+   * @return The ID of the plantation
+   */
+  public UUID getId() {
+    return id;
   }
 
   /**
@@ -72,7 +95,9 @@ public class Plantation {
    */
   public void setSizeArea(Double sizeArea) {
     if (sizeArea == null || sizeArea < 0) {
-      throw new IllegalArgumentException("Size area cannot be null or negative");
+      throw new IllegalArgumentException(
+        "Size area cannot be null or negative"
+      );
     }
     this.sizeArea = sizeArea;
   }
