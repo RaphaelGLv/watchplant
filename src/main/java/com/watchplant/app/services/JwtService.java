@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.UUID;
 import java.util.function.Function;
 
 @Service
@@ -20,8 +21,8 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public UUID extractUserId(String token) {
+        return UUID.fromString(extractClaim(token, Claims::getSubject));
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
@@ -62,6 +63,6 @@ public class JwtService {
     }
 
     public boolean isTokenValid(String token, String userId) {
-        return extractUsername(token).equals(userId) && !this.isTokenExpired(token);
+        return extractUserId(token).toString().equals(userId) && !this.isTokenExpired(token);
     }
 }
