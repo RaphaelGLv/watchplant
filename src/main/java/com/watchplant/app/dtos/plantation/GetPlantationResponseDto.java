@@ -8,8 +8,8 @@ import com.watchplant.app.entities.Plantation;
  */
 public class GetPlantationResponseDto {
 
-  private String name;
-  private Double sizeArea;
+  private final String name;
+  private final Double sizeArea;
 
   /**
    * Constructor for GetPlantationResponseDto.

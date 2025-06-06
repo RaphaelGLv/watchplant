@@ -3,7 +3,13 @@ package com.watchplant.app.services;
 import com.watchplant.app.dtos.plantation.*;
 import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.repositories.PlantationRepository;
+import com.watchplant.app.services.exceptions.ApplicationException;
+import com.watchplant.app.utils.UserContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Service class for managing Plantation entities.
@@ -44,7 +50,14 @@ public class PlantationService {
    * @return {@link CreatePlantationResponseDto} containing the created plantation details.
    */
   public CreatePlantationResponseDto createPlantation(CreatePlantationRequestDto requestBody) {
+    UUID userId = UserContext.getUserId();
+
+    boolean isPlantationExists = this.existsPlantationByOwnerIdAndName(userId, requestBody.getName());
+
+    if (isPlantationExists) throw new ApplicationException("Você já possui uma plantação com esse nome!", HttpStatus.CONFLICT);
+
     Plantation plantation = new Plantation(
+      userId,
       requestBody.getName(),
       requestBody.getSizeArea(),
       requestBody.getSoilType(),
@@ -52,6 +65,10 @@ public class PlantationService {
     );
     plantationRepository.save(plantation);
     return new CreatePlantationResponseDto(plantation);
+  }
+
+  private boolean existsPlantationByOwnerIdAndName(UUID ownerId, String plantationName) {
+    return plantationRepository.existsByOwnerIdAndName(ownerId, plantationName);
   }
 
   /**

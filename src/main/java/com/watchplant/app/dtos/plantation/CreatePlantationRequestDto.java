@@ -2,6 +2,9 @@ package com.watchplant.app.dtos.plantation;
 
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for creating a plantation.
@@ -9,9 +12,17 @@ import com.watchplant.app.enums.SunlightIncidenceEnum;
  */
 public class CreatePlantationRequestDto {
 
+  @NotBlank(message = "O nome é um campo obrigatório")
   private String name;
+
+  @NotNull(message = "O tamanho da plantação é um campo obrigatório")
+  @Min(value = 1, message = "A área de plantação deve ser maior ou igual a 1m²")
   private Double sizeArea;
+
+  @NotNull(message = "O tipo de solo é um campo obrigatório")
   private SoilTypeEnum soilType;
+
+  @NotNull(message = "A frequência da incidência solar é um campo obrigatório")
   private SunlightIncidenceEnum sunlightIncidence;
 
   /**
@@ -22,7 +33,7 @@ public class CreatePlantationRequestDto {
    * @param soilType The soil type of the plantation.
    * @param sunlightIncidence The sunlight incidence of the plantation.
    */
-  public CreatePlantationRequestDto(String name, Double sizeArea, SoilTypeEnum soilType, SunlightIncidenceEnum sunlightIncidence) {
+  public CreatePlantationRequestDto(String name, Double sizeArea, @NotNull SoilTypeEnum soilType, @NotNull SunlightIncidenceEnum sunlightIncidence) {
     this.name = name;
     this.sizeArea = sizeArea;
     this.soilType = soilType;

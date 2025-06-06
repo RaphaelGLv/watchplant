@@ -25,4 +25,14 @@ public enum SoilTypeEnum {
   public String getType() {
     return type;
   }
+
+  public static SoilTypeEnum fromString(String type) {
+    for (SoilTypeEnum soilType : SoilTypeEnum.values()) {
+      if (soilType.getType().equalsIgnoreCase(type)) {
+        return soilType;
+      }
+    }
+    throw new IllegalArgumentException("Tipo de solo inválido: " + type);
+  }
+
 }

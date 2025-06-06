@@ -8,6 +8,7 @@ import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import java.util.UUID;
 
 /**
@@ -20,6 +21,7 @@ public class Plantation {
   @Id
   private UUID id;
 
+  private UUID ownerId;
   private String name;
   private Double sizeArea;
   private SoilTypeEnum soilType;
@@ -34,25 +36,21 @@ public class Plantation {
    * @throws IllegalArgumentException if name is null or empty, or if sizeArea is null or negative
    */
   public Plantation(
-    String name,
-    Double sizeArea,
-    SoilTypeEnum soilType,
-    SunlightIncidenceEnum sunlightIncidence
+          UUID ownerId,
+          String name,
+          Double sizeArea,
+          SoilTypeEnum soilType,
+          SunlightIncidenceEnum sunlightIncidence
   ) {
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be null or empty");
-    }
-    if (sizeArea == null || sizeArea < 0) {
-      throw new IllegalArgumentException(
-        "Size area cannot be null or negative"
-      );
-    }
+    this.ownerId = ownerId;
     this.id = UUID.randomUUID();
     this.name = name;
     this.sizeArea = sizeArea;
     this.soilType = soilType;
     this.sunlightIncidence = sunlightIncidence;
   }
+
+  public Plantation() {}
 
   /**
    * Gets the ID of the plantation

@@ -34,18 +34,6 @@ public class User {
    * @throws IllegalArgumentException if name, email or phone is null or empty
    */
   public User(String name, String email, String phone, UserAccount account) {
-    if (name == null || name.isEmpty()) {
-      throw new IllegalArgumentException("Name cannot be null or empty");
-    }
-    if (email == null || email.isEmpty()) {
-      throw new IllegalArgumentException("Email cannot be null or empty");
-    }
-    if (phone == null || phone.isEmpty()) {
-      throw new IllegalArgumentException("Phone cannot be null or empty");
-    }
-    if (account == null) {
-      throw new IllegalArgumentException("Account cannot be null");
-    }
     this.id = UUID.randomUUID();
     this.name = name;
     this.email = email;

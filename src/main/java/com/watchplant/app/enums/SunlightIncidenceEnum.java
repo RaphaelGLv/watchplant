@@ -23,4 +23,13 @@ public enum SunlightIncidenceEnum {
   public String getType() {
     return type;
   }
+
+  public static SunlightIncidenceEnum fromString(String type) {
+    for (SunlightIncidenceEnum sunlightIncidence : SunlightIncidenceEnum.values()) {
+      if (sunlightIncidence.getType().equalsIgnoreCase(type)) {
+        return sunlightIncidence;
+      }
+    }
+    throw new IllegalArgumentException("Incidência solar inválida: " + type);
+  }
 }
