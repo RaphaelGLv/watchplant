@@ -6,6 +6,8 @@ package com.watchplant.app.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.util.UUID;
 
 /**
@@ -13,6 +15,7 @@ import java.util.UUID;
  * @author pedro
  */
 @Entity
+@Table(name = "user_account")
 public class UserAccount {
 
   @Id
@@ -44,6 +47,8 @@ public class UserAccount {
     this.password = password;
     this.loginTries = loginTries;
   }
+
+  public UserAccount() {}
 
   /**
    * Gets the ID of the user account

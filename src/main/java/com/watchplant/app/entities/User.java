@@ -4,8 +4,8 @@
  */
 package com.watchplant.app.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 
 /**
@@ -13,6 +13,7 @@ import java.util.UUID;
  * @author pedro
  */
 @Entity
+@Table(name = "users")
 public class User {
 
   @Id
@@ -22,6 +23,9 @@ public class User {
   private String email;
   private String phone;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "account_id", referencedColumnName = "id")
+  private UserAccount account;
   /**
    * Constructor for User
    * @param name The name of the user
@@ -29,7 +33,7 @@ public class User {
    * @param phone The phone number of the user
    * @throws IllegalArgumentException if name, email or phone is null or empty
    */
-  public User(String name, String email, String phone) {
+  public User(String name, String email, String phone, UserAccount account) {
     if (name == null || name.isEmpty()) {
       throw new IllegalArgumentException("Name cannot be null or empty");
     }
@@ -39,11 +43,17 @@ public class User {
     if (phone == null || phone.isEmpty()) {
       throw new IllegalArgumentException("Phone cannot be null or empty");
     }
+    if (account == null) {
+      throw new IllegalArgumentException("Account cannot be null");
+    }
     this.id = UUID.randomUUID();
     this.name = name;
     this.email = email;
     this.phone = phone;
+    this.account = account;
   }
+
+  public User() {}
 
   /**
    * Gets the ID of the user
