@@ -1,5 +1,6 @@
 package com.watchplant.app.dtos.user;
 
+import com.watchplant.app.dtos.address.CreateAddressRequestDto;
 import com.watchplant.app.dtos.auth.CreateUserAccountRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -16,6 +17,9 @@ public class CreateUserRequestDTO {
 
     @Valid
     private CreateUserAccountRequestDTO account;
+
+    @Valid
+    private CreateAddressRequestDto address;
 
     public String getName() {
         return name;
@@ -39,5 +43,13 @@ public class CreateUserRequestDTO {
 
     public void setAccount(CreateUserAccountRequestDTO account) {
         this.account = account;
+    }
+
+    public CreateAddressRequestDto getAddress() {
+        return address;
+    }
+
+    public void setAddress(CreateAddressRequestDto address) {
+        this.address = address;
     }
 }

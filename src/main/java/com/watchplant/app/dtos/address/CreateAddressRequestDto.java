@@ -4,36 +4,25 @@
  */
 package com.watchplant.app.dtos.address;
 
+import jakarta.validation.constraints.NotBlank;
+
 /**
  *
  * @author pedro
  */
 public class CreateAddressRequestDto {
 
+  @NotBlank(message = "O CEP é um campo obrigatório")
   private String zipCode;
-  private String street;
-  private String number;
-  private String neighborhood;
 
-  /**
-   * Constructor for CreateAddressRequestDto
-   *
-   * @param zipCode The zip code of the address
-   * @param street The street of the address
-   * @param number The number of the address
-   * @param neighborhood The neighborhood of the address
-   */
-  public CreateAddressRequestDto(
-    String zipCode,
-    String street,
-    String number,
-    String neighborhood
-  ) {
-    this.zipCode = zipCode;
-    this.street = street;
-    this.number = number;
-    this.neighborhood = neighborhood;
-  }
+  @NotBlank(message = "A rua é um campo obrigatório")
+  private String street;
+
+  @NotBlank(message = "O número do endereço é um campo obrigatório")
+  private String number;
+
+  @NotBlank(message = "O bairro é um campo obrigatório")
+  private String neighborhood;
 
   /**
    * Gets the zip code of the address

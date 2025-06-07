@@ -37,25 +37,15 @@ public class Address {
     String number,
     String neighborhood
   ) {
-    if (zipCode == null || zipCode.isEmpty()) {
-      throw new IllegalArgumentException("Zip code cannot be null or empty");
-    }
-    if (street == null || street.isEmpty()) {
-      throw new IllegalArgumentException("Street cannot be null or empty");
-    }
-    if (number == null || number.isEmpty()) {
-      throw new IllegalArgumentException("Number cannot be null or empty");
-    }
-    if (neighborhood == null || neighborhood.isEmpty()) {
-      throw new IllegalArgumentException(
-        "Neighborhood cannot be null or empty"
-      );
-    }
     this.id = UUID.randomUUID();
     this.zipCode = zipCode;
     this.street = street;
     this.number = number;
     this.neighborhood = neighborhood;
+  }
+
+  public Address() {
+    
   }
 
   /**
