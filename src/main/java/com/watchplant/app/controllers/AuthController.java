@@ -2,7 +2,7 @@ package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.auth.CreateUserRequestDTO;
 import com.watchplant.app.dtos.auth.LoginRequestDTO;
-import com.watchplant.app.dtos.user.JwtTokenResponseDTO;
+import com.watchplant.app.dtos.auth.JwtTokenResponseDTO;
 import com.watchplant.app.services.AuthService;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import jakarta.validation.Valid;

@@ -3,7 +3,7 @@ package com.watchplant.app.services;
 import com.watchplant.app.dtos.auth.CreateUserAccountRequestDTO;
 import com.watchplant.app.dtos.auth.CreateUserRequestDTO;
 import com.watchplant.app.dtos.auth.LoginRequestDTO;
-import com.watchplant.app.dtos.user.JwtTokenResponseDTO;
+import com.watchplant.app.dtos.auth.JwtTokenResponseDTO;
 import com.watchplant.app.entities.User;
 import com.watchplant.app.entities.UserAccount;
 import com.watchplant.app.repositories.UserAccountRepository;
@@ -11,7 +11,6 @@ import com.watchplant.app.repositories.UserRepository;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 @Service
 public class AuthService {

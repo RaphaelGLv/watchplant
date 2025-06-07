@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.user;
+package com.watchplant.app.dtos.auth;
 
 public class JwtTokenResponseDTO {
     private String jwtToken;
