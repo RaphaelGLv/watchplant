@@ -1,5 +1,6 @@
-package com.watchplant.app.dtos.auth;
+package com.watchplant.app.dtos.user;
 
+import com.watchplant.app.dtos.auth.CreateUserAccountRequestDTO;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

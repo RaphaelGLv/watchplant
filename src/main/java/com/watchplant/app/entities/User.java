@@ -22,6 +22,7 @@ public class User {
   private String name;
   private String email;
   private String phone;
+  private UUID addressId;
 
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "account_id", referencedColumnName = "id")
@@ -33,12 +34,13 @@ public class User {
    * @param phone The phone number of the user
    * @throws IllegalArgumentException if name, email or phone is null or empty
    */
-  public User(String name, String email, String phone, UserAccount account) {
+  public User(String name, String email, String phone, UUID addressId, UserAccount account) {
     this.id = UUID.randomUUID();
     this.name = name;
     this.email = email;
     this.phone = phone;
     this.account = account;
+    this.addressId = addressId;
   }
 
   public User() {}

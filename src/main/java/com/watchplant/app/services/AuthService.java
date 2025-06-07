@@ -1,7 +1,7 @@
 package com.watchplant.app.services;
 
 import com.watchplant.app.dtos.auth.CreateUserAccountRequestDTO;
-import com.watchplant.app.dtos.auth.CreateUserRequestDTO;
+import com.watchplant.app.dtos.user.CreateUserRequestDTO;
 import com.watchplant.app.dtos.auth.LoginRequestDTO;
 import com.watchplant.app.dtos.auth.JwtTokenResponseDTO;
 import com.watchplant.app.entities.User;
