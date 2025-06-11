@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  *
  * @author pedro
@@ -21,5 +23,14 @@ public enum CareLevelEnum {
 
   public String getType() {
     return type;
+  }
+
+  @JsonCreator
+  public static CareLevelEnum fromString(String text) {
+    try {
+      return CareLevelEnum.valueOf(text.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid value for CareLevelEnum: " + text);
+    }
   }
 }

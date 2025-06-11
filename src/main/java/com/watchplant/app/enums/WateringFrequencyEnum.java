@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  *
  * @author pedro
@@ -22,5 +24,14 @@ public enum WateringFrequencyEnum {
 
   public String getType() {
     return type;
+  }
+
+  @JsonCreator
+  public static WateringFrequencyEnum fromString(String value) {
+    try {
+      return WateringFrequencyEnum.valueOf(value.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid value for WateringFrequencyEnum: " + value);
+    }
   }
 }

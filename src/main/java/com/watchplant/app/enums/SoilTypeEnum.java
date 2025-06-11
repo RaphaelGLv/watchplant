@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  *
  * @author pedro
@@ -26,13 +28,13 @@ public enum SoilTypeEnum {
     return type;
   }
 
+  @JsonCreator
   public static SoilTypeEnum fromString(String type) {
-    for (SoilTypeEnum soilType : SoilTypeEnum.values()) {
-      if (soilType.getType().equalsIgnoreCase(type)) {
-        return soilType;
-      }
+    try {
+      return SoilTypeEnum.valueOf(type.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid SoilTypeEnum: " + type);
     }
-    throw new IllegalArgumentException("Tipo de solo inválido: " + type);
   }
 
 }

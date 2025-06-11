@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  *
  * @author pedro
@@ -21,5 +23,14 @@ public enum PlantCycleEnum {
 
   public String getType() {
     return type;
+  }
+
+  @JsonCreator
+  public static PlantCycleEnum fromString(String value) {
+    try {
+      return PlantCycleEnum.valueOf(value.toUpperCase());
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid value for PlantCycleEnum: " + value);
+    }
   }
 }

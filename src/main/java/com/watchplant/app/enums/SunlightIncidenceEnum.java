@@ -4,6 +4,8 @@
  */
 package com.watchplant.app.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 /**
  *
  * @author pedro
@@ -24,12 +26,12 @@ public enum SunlightIncidenceEnum {
     return type;
   }
 
+  @JsonCreator
   public static SunlightIncidenceEnum fromString(String type) {
-    for (SunlightIncidenceEnum sunlightIncidence : SunlightIncidenceEnum.values()) {
-      if (sunlightIncidence.getType().equalsIgnoreCase(type)) {
-        return sunlightIncidence;
-      }
+    try {
+      return SunlightIncidenceEnum.valueOf(type.toUpperCase().replace(" ", "_"));
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Invalid SunlightIncidenceEnum type: " + type);
     }
-    throw new IllegalArgumentException("Incidência solar inválida: " + type);
   }
 }
