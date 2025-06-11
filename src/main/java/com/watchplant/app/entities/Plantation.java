@@ -131,4 +131,8 @@ public class Plantation {
   public void setSunlightIncidence(SunlightIncidenceEnum sunlightIncidence) {
     this.sunlightIncidence = sunlightIncidence;
   }
+
+    public UUID getOwnerId() {
+        return ownerId;
+    }
 }

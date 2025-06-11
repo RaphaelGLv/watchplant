@@ -1,21 +1,12 @@
 package com.watchplant.app.utils;
 
-import com.watchplant.app.enums.FrequencyEnum;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.watchplant.app.enums.IntervalEnum;
 
-public class PrunningCount {
-    private final Integer amount;
-    private final FrequencyEnum frequency;
-
-    public PrunningCount(Integer amount, FrequencyEnum frequency) {
-        this.amount = amount;
-        this.frequency = frequency;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public FrequencyEnum getFrequency() {
-        return frequency;
-    }
+public record PruningCount(
+        @JsonProperty("amount")
+        Integer amount,
+        @JsonProperty("interval")
+        IntervalEnum interval
+) {
 }

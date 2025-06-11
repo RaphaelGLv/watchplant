@@ -1,24 +1,28 @@
 package com.watchplant.app.dtos.plant;
 
-import com.watchplant.app.entities.Plant;
+import com.watchplant.app.entities.PlantedPlant;
 
 /**
- * DTO for the response of creating a {@link Plant}.
+ * DTO for the response of creating a {@link PlantedPlant}.
  * Contains the details of the created plant.
  */
 public class CreatePlantResponseDto {
 
-  private String scientificName;
-  private String commonName;
+  private final String scientificName;
+  private final String commonName;
+  private final Integer quantity;
+  private final String plantationName;
 
   /**
    * Constructor for {@link CreatePlantResponseDto}.
    *
-   * @param plant The created {@link Plant}.
+   * @param plantedPlant The created {@link PlantedPlant}.
    */
-  public CreatePlantResponseDto(Plant plant) {
-    this.scientificName = plant.getScientificName();
-    this.commonName = plant.getCommonName();
+  public CreatePlantResponseDto(PlantedPlant plantedPlant, Integer quantity, String plantationName) {
+    this.scientificName = plantedPlant.getScientificName();
+    this.commonName = plantedPlant.getCommonName();
+    this.quantity = plantedPlant.getQuantity();
+    this.plantationName = plantationName;
   }
 
   /**
@@ -37,5 +41,13 @@ public class CreatePlantResponseDto {
    */
   public String getCommonName() {
     return commonName;
+  }
+
+  public String getPlantationName() {
+      return plantationName;
+  }
+
+  public Integer getQuantity() {
+      return quantity;
   }
 }

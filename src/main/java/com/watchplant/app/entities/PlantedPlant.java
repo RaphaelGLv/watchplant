@@ -17,7 +17,7 @@ import java.util.UUID;
  * @author pedro
  */
 @Entity
-public class Plant {
+public class PlantedPlant {
 
   @Id
   private UUID id;
@@ -29,11 +29,13 @@ public class Plant {
   private WateringFrequencyEnum wateringFrequency;
   private SunlightIncidenceEnum sunlightIncidence;
   private List<MonthNamesEnum> pruningMonth;
-  private PruningCount pruningCount;
+  private Integer pruningAmount;
+  private IntervalEnum pruningInterval;
   private SoilTypeEnum soilType;
   private CareLevelEnum careLevel;
 
   private UUID plantationId;
+  private Integer quantity;
 
   /**
    * Constructor for Plant
@@ -44,12 +46,11 @@ public class Plant {
    * @param wateringFrequency The watering frequency of the plant
    * @param sunlightIncidence The sunlight incidence required by the plant
    * @param pruningMonth The month for pruning the plant
-   * @param pruningCount The pruning count for the plant
    * @param soilType The soil type suitable for the plant
    * @param careLevel The care level required for the plant
    * @throws IllegalArgumentException if scientificName or commonName is null or empty, or if maxFeetHeight is null or negative
    */
-  public Plant(
+  public PlantedPlant(
           String scientificName,
           String commonName,
           Double maxFeetHeight,
@@ -60,7 +61,7 @@ public class Plant {
           WateringFrequencyEnum wateringFrequency,
           SunlightIncidenceEnum sunlightIncidence,
           SoilTypeEnum soilType,
-          UUID plantationId
+          UUID plantationId, Integer quantity
   ) {
     this.id = UUID.randomUUID();
     this.scientificName = scientificName;
@@ -70,13 +71,15 @@ public class Plant {
     this.wateringFrequency = wateringFrequency;
     this.sunlightIncidence = sunlightIncidence;
     this.pruningMonth = pruningMonth;
-    this.pruningCount = this.pruningCount;
+    this.pruningAmount = pruningCount.amount();
+    this.pruningInterval = pruningCount.interval();
     this.soilType = soilType;
     this.careLevel = careLevel;
     this.plantationId = plantationId;
+    this.quantity = quantity;
   }
 
-  public Plant() {
+  public PlantedPlant() {
 
   }
 
@@ -217,22 +220,6 @@ public class Plant {
   }
 
   /**
-   * Gets the yearly pruning count of the plant
-   * @return The yearly pruning count of the plant
-   */
-  public PruningCount getPruningCount() {
-    return pruningCount;
-  }
-
-  /**
-   * Sets the yearly pruning count of the plant
-   * @param pruningCount The yearly pruning count of the plant
-   */
-  public void setPruningCount(PruningCount pruningCount) {
-    this.pruningCount = pruningCount;
-  }
-
-  /**
    * Gets the soil type suitable for the plant
    * @return The soil type suitable for the plant
    */
@@ -266,5 +253,17 @@ public class Plant {
 
     public UUID getPlantationId() {
         return plantationId;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public Integer getPruningAmount() {
+        return pruningAmount;
+    }
+
+    public IntervalEnum getPruningInterval() {
+        return pruningInterval;
     }
 }

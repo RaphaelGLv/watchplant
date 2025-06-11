@@ -1,9 +1,9 @@
 package com.watchplant.app.dtos.plant;
 
-import com.watchplant.app.entities.Plant;
+import com.watchplant.app.entities.PlantedPlant;
 
 /**
- * DTO for the response of updating a {@link Plant}.
+ * DTO for the response of updating a {@link PlantedPlant}.
  * Contains the updated details of the plant.
  */
 public class UpdatePlantResponseDto {
@@ -14,11 +14,11 @@ public class UpdatePlantResponseDto {
   /**
    * Constructor for {@link UpdatePlantResponseDto}.
    *
-   * @param plant The updated {@link Plant}.
+   * @param plantedPlant The updated {@link PlantedPlant}.
    */
-  public UpdatePlantResponseDto(Plant plant) {
-    this.scientificName = plant.getScientificName();
-    this.commonName = plant.getCommonName();
+  public UpdatePlantResponseDto(PlantedPlant plantedPlant) {
+    this.scientificName = plantedPlant.getScientificName();
+    this.commonName = plantedPlant.getCommonName();
   }
 
   /**

@@ -4,12 +4,16 @@
  */
 package com.watchplant.app.services;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Objects;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.watchplant.app.dtos.plant.PerenualPlantDetailsDto;
+import com.watchplant.app.services.exceptions.ApplicationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 /**
  *
@@ -25,27 +29,19 @@ public class PerenualService {
     this.apiKey = apiKey;
   }
 
-  public String fetchGetPlantDetails(String plantId) {
+  public PerenualPlantDetailsDto getPlantDetails(Integer plantId) {
     try {
       URL url = new URL(
         BASE_URL + "v2/species/details/" + plantId + "?key=" + apiKey
       );
-      HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-      connection.setRequestMethod("GET");
-      BufferedReader in = new BufferedReader(
-        new InputStreamReader(connection.getInputStream())
-      );
-      String inputLine;
-      StringBuffer content = new StringBuffer();
-      while ((inputLine = in.readLine()) != null) {
-        content.append(inputLine);
-      }
-      in.close();
-      connection.disconnect();
-      return content.toString();
+
+      RestTemplate restTemplate = new RestTemplate();
+      JsonNode plantDetailsJson = Objects.requireNonNull(restTemplate.getForObject(url.toString(), JsonNode.class));
+
+      ObjectMapper mapper = new ObjectMapper();
+      return mapper.readValue(plantDetailsJson.toString(), PerenualPlantDetailsDto.class);
     } catch (Exception e) {
-      e.printStackTrace();
-      return null;
+      throw new ApplicationException(e.getMessage());
     }
   }
 }

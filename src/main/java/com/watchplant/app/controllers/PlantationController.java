@@ -18,7 +18,7 @@ class PlantationController {
         this.plantationService = plantationService;
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public CreatePlantationResponseDto createPlantation(@Valid @RequestBody CreatePlantationRequestDto createPlantationRequestDto) {
         return this.plantationService.createPlantation(createPlantationRequestDto);
     }
