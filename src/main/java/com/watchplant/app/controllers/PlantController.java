@@ -6,6 +6,7 @@ import com.watchplant.app.dtos.plant.GetPlantRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantResponseDto;
 import com.watchplant.app.dtos.plant.UpdatePlantRequestDto;
 import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
+import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
 import com.watchplant.app.services.PlantService;
@@ -63,5 +64,21 @@ class PlantController {
     @DeleteMapping("/{id}")
     public void deletePlant(@PathVariable UUID id) {
         plantService.deletePlant(id);
+    }
+
+    @GetMapping("/search")
+    public PerenualPlantSearchResponseDto searchPlants(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) Boolean edible,
+            @RequestParam(required = false) Boolean poisonous,
+            @RequestParam(required = false) String cycle,
+            @RequestParam(required = false) String watering,
+            @RequestParam(required = false) String sunlight,
+            @RequestParam(required = false) Boolean indoor,
+            @RequestParam(required = false) String hardiness
+    ) {
+        return plantService.searchPlantsOnPerenual(q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness);
     }
 }

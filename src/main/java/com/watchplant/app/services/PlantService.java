@@ -174,4 +174,21 @@ public class PlantService {
       .map(GetPlantResponseDto::new)
       .collect(Collectors.toList());
   }
+
+  public PerenualPlantSearchResponseDto searchPlantsOnPerenual(
+      String q,
+      Integer page,
+      String order,
+      Boolean edible,
+      Boolean poisonous,
+      String cycle,
+      String watering,
+      String sunlight,
+      Boolean indoor,
+      String hardiness
+  ) {
+    return perenualService.searchPlants(
+        q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness
+    );
+  }
 }
