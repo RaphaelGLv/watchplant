@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing {@link PlantedPlant} entities.
@@ -128,7 +133,7 @@ public class PlantService {
    * @throws IllegalArgumentException if the plant is not found.
    */
   public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
-    PlantedPlant plant = plantRepository
+    PlantedPlant plant = plantedPlantRepository
       .findById(requestBody.getId())
       .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
 
@@ -141,7 +146,7 @@ public class PlantService {
     requestBody.getSoilType().ifPresent(plant::setSoilType);
     requestBody.getCareLevel().ifPresent(plant::setCareLevel);
 
-    plantRepository.save(plant);
+    plantedPlantRepository.save(plant);
     return new UpdatePlantResponseDto(plant);
   }
 
@@ -152,9 +157,21 @@ public class PlantService {
    * @throws IllegalArgumentException if the plant is not found.
    */
   public void deletePlant(UUID id) {
-    if (!plantRepository.existsById(id)) {
+    if (!plantedPlantRepository.existsById(id)) {
       throw new IllegalArgumentException("Plant not found");
     }
-    plantRepository.deleteById(id);
+    plantedPlantRepository.deleteById(id);
+  }
+
+  public List<GetPlantResponseDto> listPlantsByPlantationId(UUID plantationId) {
+    UUID userId = UserContext.getUserId();
+    boolean owns = plantationRepository.findByIdAndOwnerId(plantationId, userId).isPresent();
+    if (!owns) {
+      throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
+    }
+    return plantedPlantRepository.findAll().stream()
+      .filter(plant -> plantationId.equals(plant.getPlantationId()))
+      .map(GetPlantResponseDto::new)
+      .collect(Collectors.toList());
   }
 }
