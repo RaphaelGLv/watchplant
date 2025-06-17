@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing {@link PlantedPlant} entities.
@@ -124,5 +125,17 @@ public class PlantService {
       throw new IllegalArgumentException("Plant not found");
     }
     plantRepository.deleteById(id);
+  }
+
+  public List<GetPlantResponseDto> listPlantsByPlantationId(UUID plantationId) {
+    UUID userId = UserContext.getUserId();
+    boolean owns = plantationRepository.findByIdAndOwnerId(plantationId, userId).isPresent();
+    if (!owns) {
+      throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
+    }
+    return plantRepository.findAll().stream()
+      .filter(plant -> plantationId.equals(plant.getPlantationId()))
+      .map(GetPlantResponseDto::new)
+      .collect(Collectors.toList());
   }
 }

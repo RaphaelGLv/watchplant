@@ -1,24 +1,24 @@
 package com.watchplant.app.controllers;
 
-import com.watchplant.app.dtos.plantation.CreatePlantationRequestDto;
-import com.watchplant.app.dtos.plantation.CreatePlantationResponseDto;
-import com.watchplant.app.dtos.plantation.GetPlantationRequestDto;
-import com.watchplant.app.dtos.plantation.GetPlantationResponseDto;
-import com.watchplant.app.dtos.plantation.UpdatePlantationRequestDto;
-import com.watchplant.app.dtos.plantation.UpdatePlantationResponseDto;
+import com.watchplant.app.dtos.plant.GetPlantResponseDto;
+import com.watchplant.app.dtos.plantation.*;
+import com.watchplant.app.services.PlantService;
 import com.watchplant.app.services.PlantationService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/plantation")
 class PlantationController {
     private final PlantationService plantationService;
+    private final PlantService plantService;
 
-    PlantationController(PlantationService plantationService) {
+    PlantationController(PlantationService plantationService, PlantService plantService) {
         this.plantationService = plantationService;
+        this.plantService = plantService;
     }
 
     @PostMapping("/")
@@ -50,5 +50,10 @@ class PlantationController {
     @DeleteMapping("/{id}")
     public void deletePlantation(@PathVariable UUID id) {
         plantationService.deletePlantation(id);
+    }
+
+    @GetMapping("/plants")
+    public List<GetPlantResponseDto> listPlantsByPlantation(@RequestParam UUID plantationId) {
+        return plantService.listPlantsByPlantationId(plantationId);
     }
 }
