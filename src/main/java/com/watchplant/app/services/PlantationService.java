@@ -90,4 +90,17 @@ public class PlantationService {
     plantationRepository.save(plantation);
     return new UpdatePlantationResponseDto(plantation);
   }
+
+  /**
+   * Deletes a plantation by ID.
+   *
+   * @param id The ID of the plantation to delete.
+   * @throws IllegalArgumentException if the plantation is not found.
+   */
+  public void deletePlantation(UUID id) {
+    if (!plantationRepository.existsById(id)) {
+      throw new IllegalArgumentException("Plantation not found");
+    }
+    plantationRepository.deleteById(id);
+  }
 }
