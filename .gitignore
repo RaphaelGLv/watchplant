@@ -33,3 +33,4 @@ nbdist/
 .nb-gradle/
 
 *.zip
+watchplant-diagrams.asta.lock
