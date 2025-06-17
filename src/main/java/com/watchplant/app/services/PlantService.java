@@ -119,4 +119,42 @@ public class PlantService {
             soilTypeEvaluation
     );
   }
+
+  /**
+   * Updates an existing plant.
+   *
+   * @param requestBody The request containing the updated plant details.
+   * @return {@link UpdatePlantResponseDto} containing the updated plant details.
+   * @throws IllegalArgumentException if the plant is not found.
+   */
+  public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
+    PlantedPlant plant = plantRepository
+      .findById(requestBody.getId())
+      .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+
+    requestBody.getScientificName().ifPresent(plant::setScientificName);
+    requestBody.getCommonName().ifPresent(plant::setCommonName);
+    requestBody.getMaxFeetHeight().ifPresent(plant::setMaxFeetHeight);
+    requestBody.getCycle().ifPresent(plant::setCycle);
+    requestBody.getWateringFrequency().ifPresent(plant::setWateringFrequency);
+    requestBody.getSunlightIncidence().ifPresent(plant::setSunlightIncidence);
+    requestBody.getSoilType().ifPresent(plant::setSoilType);
+    requestBody.getCareLevel().ifPresent(plant::setCareLevel);
+
+    plantRepository.save(plant);
+    return new UpdatePlantResponseDto(plant);
+  }
+
+  /**
+   * Deletes a plant by ID.
+   *
+   * @param id The ID of the plant to delete.
+   * @throws IllegalArgumentException if the plant is not found.
+   */
+  public void deletePlant(UUID id) {
+    if (!plantRepository.existsById(id)) {
+      throw new IllegalArgumentException("Plant not found");
+    }
+    plantRepository.deleteById(id);
+  }
 }
