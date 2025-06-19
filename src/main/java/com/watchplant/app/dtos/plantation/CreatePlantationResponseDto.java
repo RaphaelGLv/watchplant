@@ -4,6 +4,7 @@ import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
 import jakarta.validation.constraints.NotBlank;
+import java.util.UUID;
 
 /**
  * DTO for the response of creating a plantation.
@@ -11,6 +12,7 @@ import jakarta.validation.constraints.NotBlank;
  */
 public class CreatePlantationResponseDto {
 
+  private UUID id;
   @NotBlank(message = "O nome da plantação é um campo obrigatório")
   private String name;
 
@@ -29,10 +31,15 @@ public class CreatePlantationResponseDto {
    * @param plantation The created plantation.
    */
   public CreatePlantationResponseDto(Plantation plantation) {
+    this.id = plantation.getId();
     this.name = plantation.getName();
     this.sizeArea = plantation.getSizeArea();
     this.soilType = plantation.getSoilType();
     this.sunlightIncidence = plantation.getSunlightIncidence();
+  }
+
+  public UUID getId() {
+    return id;
   }
 
   /**

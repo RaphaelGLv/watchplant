@@ -8,11 +8,13 @@ public class GetUserResponseDTO {
     private UUID id;
     private String name;
     private String phone;
+    private String email;
 
     public GetUserResponseDTO(User user) {
         this.id = user.getId();
         this.name = user.getName();
         this.phone = user.getPhone();
+        this.email = user.getEmail();
     }
 
     public UUID getId() {
@@ -37,5 +39,13 @@ public class GetUserResponseDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
