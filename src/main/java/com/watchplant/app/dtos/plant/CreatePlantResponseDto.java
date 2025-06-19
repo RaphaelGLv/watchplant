@@ -1,6 +1,7 @@
 package com.watchplant.app.dtos.plant;
 
 import com.watchplant.app.entities.PlantedPlant;
+import java.util.UUID;
 
 /**
  * DTO for the response of creating a {@link PlantedPlant}.
@@ -8,6 +9,7 @@ import com.watchplant.app.entities.PlantedPlant;
  */
 public class CreatePlantResponseDto {
 
+  private final UUID id;
   private final String scientificName;
   private final String commonName;
   private final Integer quantity;
@@ -19,10 +21,15 @@ public class CreatePlantResponseDto {
    * @param plantedPlant The created {@link PlantedPlant}.
    */
   public CreatePlantResponseDto(PlantedPlant plantedPlant, Integer quantity, String plantationName) {
+    this.id = plantedPlant.getId();
     this.scientificName = plantedPlant.getScientificName();
     this.commonName = plantedPlant.getCommonName();
     this.quantity = plantedPlant.getQuantity();
     this.plantationName = plantationName;
+  }
+
+  public UUID getId() {
+    return id;
   }
 
   /**

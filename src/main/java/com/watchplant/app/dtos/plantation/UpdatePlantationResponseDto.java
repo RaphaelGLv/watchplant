@@ -1,6 +1,7 @@
 package com.watchplant.app.dtos.plantation;
 
 import com.watchplant.app.entities.Plantation;
+import java.util.UUID;
 
 /**
  * DTO for the response of updating a plantation.
@@ -8,6 +9,7 @@ import com.watchplant.app.entities.Plantation;
  */
 public class UpdatePlantationResponseDto {
 
+  private UUID id;
   private String name;
   private Double sizeArea;
 
@@ -17,24 +19,19 @@ public class UpdatePlantationResponseDto {
    * @param plantation The updated plantation.
    */
   public UpdatePlantationResponseDto(Plantation plantation) {
+    this.id = plantation.getId();
     this.name = plantation.getName();
     this.sizeArea = plantation.getSizeArea();
   }
 
-  /**
-   * Gets the name of the plantation.
-   *
-   * @return The name of the plantation.
-   */
+  public UUID getId() {
+    return id;
+  }
+
   public String getName() {
     return name;
   }
 
-  /**
-   * Gets the size area of the plantation.
-   *
-   * @return The size area of the plantation.
-   */
   public Double getSizeArea() {
     return sizeArea;
   }
