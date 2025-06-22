@@ -6,10 +6,7 @@ import com.watchplant.app.dtos.auth.JwtTokenResponseDTO;
 import com.watchplant.app.services.AuthService;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
