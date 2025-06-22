@@ -2,6 +2,8 @@ package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.plant.CreatePlantRequestDto;
 import com.watchplant.app.dtos.plant.CreatePlantResponseDto;
+import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
+import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
 import com.watchplant.app.services.PlantService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,5 +23,10 @@ class PlantController {
     @PostMapping("/")
     CreatePlantResponseDto registerPlant(@Valid @RequestBody CreatePlantRequestDto createPlantRequestDto) {
         return plantService.createPlant(createPlantRequestDto);
+    }
+
+    @PostMapping("/suggestion")
+    GetPlantingBestPracticesResponseDto getPlantingBestPractices(@Valid @RequestBody GetPlantingBestPracticesRequestDto requestBody) {
+        return plantService.getPlantingBestPractices(requestBody);
     }
 }

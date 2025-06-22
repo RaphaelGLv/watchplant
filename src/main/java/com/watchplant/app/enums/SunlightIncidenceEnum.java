@@ -15,6 +15,7 @@ public enum SunlightIncidenceEnum implements IWateringNeedParameter {
   FULL_SHADE("Full Shade", NeedOfWaterEnum.LOW),
   PART_SHADE("Part Shade", NeedOfWaterEnum.MEDIUM),
   SUN_PART_SHADE("Sun Part Shade", NeedOfWaterEnum.MEDIUM),
+  PART_SUN_PART_SHADE("Part sun/part shade", NeedOfWaterEnum.MEDIUM),
   FULL_SUN("Full Sun", NeedOfWaterEnum.HIGH);
 
   private final String type;
@@ -37,7 +38,7 @@ public enum SunlightIncidenceEnum implements IWateringNeedParameter {
   @JsonCreator
   public static SunlightIncidenceEnum fromString(String type) {
     try {
-      return SunlightIncidenceEnum.valueOf(type.toUpperCase().replace(" ", "_"));
+      return SunlightIncidenceEnum.valueOf(type.toUpperCase().replace(" ", "_").replace("/", "_"));
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid SunlightIncidenceEnum type: " + type);
     }

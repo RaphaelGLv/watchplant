@@ -3,20 +3,21 @@ package com.watchplant.app.services;
 import com.watchplant.app.dtos.plant.*;
 import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.entities.PlantedPlant;
+import com.watchplant.app.enums.SoilTypeEnum;
+import com.watchplant.app.enums.SunlightIncidenceEnum;
+import com.watchplant.app.enums.WateringFrequencyEnum;
 import com.watchplant.app.repositories.PlantedPlantRepository;
 import com.watchplant.app.repositories.PlantationRepository;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import com.watchplant.app.utils.Dimensions;
+import com.watchplant.app.utils.PlantingPracticeEvaluation;
 import com.watchplant.app.utils.PruningCount;
 import com.watchplant.app.utils.UserContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Service class for managing {@link PlantedPlant} entities.
@@ -88,5 +89,34 @@ public class PlantService {
 
     plantedPlantRepository.save(newPlantedPlant);
     return new CreatePlantResponseDto(newPlantedPlant, requestBody.getQuantity(), plantation.get().getName());
+  }
+
+  public GetPlantingBestPracticesResponseDto getPlantingBestPractices(GetPlantingBestPracticesRequestDto requestBody) {
+    PerenualPlantDetailsDto plantDetails = perenualService.getPlantDetails(requestBody.plantId());
+
+    WateringFrequencyEnum idealWateringFrequency = plantDetails.getIdealWateringFrequency();
+    PlantingPracticeEvaluation<WateringFrequencyEnum> wateringEvaluation = new PlantingPracticeEvaluation<>(
+            idealWateringFrequency == requestBody.wateringFrequency(),
+            List.of(idealWateringFrequency)
+    );
+
+    List<SunlightIncidenceEnum> idealSunlightIncidenceList = plantDetails.getIdealSunlightIncidences();
+    PlantingPracticeEvaluation<SunlightIncidenceEnum> sunlightIncidenceEvaluation = new PlantingPracticeEvaluation<>(
+            idealSunlightIncidenceList.contains(requestBody.sunlightIncidence()) || idealSunlightIncidenceList.isEmpty(),
+            idealSunlightIncidenceList
+    );
+
+    List<SoilTypeEnum> idealSoilTypeList = plantDetails.getIdealSoilTypes();
+    PlantingPracticeEvaluation<SoilTypeEnum> soilTypeEvaluation = new PlantingPracticeEvaluation<>(
+            idealSoilTypeList.contains(requestBody.soilType()) || idealSoilTypeList.isEmpty(),
+            idealSoilTypeList
+    );
+
+    return new GetPlantingBestPracticesResponseDto(
+            requestBody.plantId(),
+            wateringEvaluation,
+            sunlightIncidenceEvaluation,
+            soilTypeEvaluation
+    );
   }
 }

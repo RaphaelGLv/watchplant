@@ -13,11 +13,12 @@ import com.watchplant.app.interfaces.IWateringNeedParameter;
  */
 public enum SoilTypeEnum implements IWateringNeedParameter {
   CLAY("Clay", NeedOfWaterEnum.LOW),
-  LOAMY("Loamy", NeedOfWaterEnum.LOW),
-  PEATY("Peaty", NeedOfWaterEnum.MEDIUM),
-  SANDY("Sandy", NeedOfWaterEnum.HIGH),
-  SILTY("Silty", NeedOfWaterEnum.HIGH),
-  CHALKY("Chalky", NeedOfWaterEnum.HIGH),;
+  LOAM("Loam", NeedOfWaterEnum.LOW),
+  PEAT("Peat", NeedOfWaterEnum.MEDIUM),
+  HUMUS_ENRICHED("Humus Enriched", NeedOfWaterEnum.MEDIUM),
+  SAND("Sand", NeedOfWaterEnum.HIGH),
+  SILT("Silt", NeedOfWaterEnum.HIGH),
+  CHALK("Chalk", NeedOfWaterEnum.HIGH),;
 
   private final String type;
   private final NeedOfWaterEnum needOfWater;
@@ -34,7 +35,7 @@ public enum SoilTypeEnum implements IWateringNeedParameter {
   @JsonCreator
   public static SoilTypeEnum fromString(String type) {
     try {
-      return SoilTypeEnum.valueOf(type.toUpperCase());
+      return SoilTypeEnum.valueOf(type.toUpperCase().trim().replace(" ", "_"));
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid SoilTypeEnum: " + type);
     }
