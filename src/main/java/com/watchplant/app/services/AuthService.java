@@ -57,6 +57,8 @@ public class AuthService {
                 !userAccount.getPassword().equals(body.getPassword())
         ) throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
 
-        return new JwtTokenResponseDTO(jwtService.generateToken(userAccount.getId().toString()));
+        User user = userRepository.findByAccount_Id(userAccount.getId());
+
+        return new JwtTokenResponseDTO(jwtService.generateToken(user.getId().toString()));
     }
 }
