@@ -2,10 +2,13 @@ package com.watchplant.app.dtos.plant;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.watchplant.app.deserializers.MonthDeserializer;
 import com.watchplant.app.enums.*;
 import com.watchplant.app.utils.Dimensions;
 import com.watchplant.app.utils.PruningCount;
 
+import java.time.Month;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,7 +20,7 @@ public class PerenualPlantDetailsDto {
     private final List<Dimensions> dimensions;
     // TODO: Create enum to describe cycle
     private final PlantCycleEnum cycle;
-    private final List<MonthNamesEnum> pruningMonth;
+    private final List<Month> pruningMonth;
     private final List<PruningCount> pruningCount;
     private final CareLevelEnum careLevel;
     private final WateringFrequencyEnum idealWateringFrequency;
@@ -37,8 +40,9 @@ public class PerenualPlantDetailsDto {
             List<Dimensions> dimensions,
             @JsonProperty("cycle")
             PlantCycleEnum cycle,
+            @JsonDeserialize(contentUsing = MonthDeserializer.class)
             @JsonProperty("pruning_month")
-            List<MonthNamesEnum> pruningMonth,
+            List<Month> pruningMonth,
             @JsonProperty("pruning_count")
             List<PruningCount> pruningCount,
             @JsonProperty("care_level")
@@ -100,7 +104,7 @@ public class PerenualPlantDetailsDto {
         return idealSoilTypes;
     }
 
-    public List<MonthNamesEnum> getPruningMonth() {
+    public List<Month> getPruningMonth() {
         return pruningMonth;
     }
 

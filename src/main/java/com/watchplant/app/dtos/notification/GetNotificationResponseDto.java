@@ -1,6 +1,8 @@
 package com.watchplant.app.dtos.notification;
 
 import com.watchplant.app.entities.Notification;
+import com.watchplant.app.enums.NotificationTypeEnum;
+
 import java.time.LocalDateTime;
 
 /**
@@ -8,10 +10,10 @@ import java.time.LocalDateTime;
  */
 public class GetNotificationResponseDto {
 
-  private LocalDateTime creationDate;
-  private String message;
-  private boolean isSeen;
-  private int type;
+  private final LocalDateTime creationDate;
+  private final String message;
+  private final boolean isSeen;
+  private final NotificationTypeEnum type;
 
   public GetNotificationResponseDto(Notification notification) {
     this.creationDate = notification.getCreationDate();
@@ -32,7 +34,7 @@ public class GetNotificationResponseDto {
     return isSeen;
   }
 
-  public int getType() {
+  public NotificationTypeEnum getType() {
     return type;
   }
 }

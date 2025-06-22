@@ -5,23 +5,26 @@
 package com.watchplant.app.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.watchplant.app.interfaces.IWateringNeedParameter;
 
 /**
  *
  * @author pedro
  */
-public enum SoilTypeEnum {
-  CLAY("Clay"),
-  SANDY("Sandy"),
-  LOAMY("Loamy"),
-  SILTY("Silty"),
-  PEATY("Peaty"),
-  CHALKY("Chalky");
+public enum SoilTypeEnum implements IWateringNeedParameter {
+  CLAY("Clay", NeedOfWaterEnum.LOW),
+  LOAMY("Loamy", NeedOfWaterEnum.LOW),
+  PEATY("Peaty", NeedOfWaterEnum.MEDIUM),
+  SANDY("Sandy", NeedOfWaterEnum.HIGH),
+  SILTY("Silty", NeedOfWaterEnum.HIGH),
+  CHALKY("Chalky", NeedOfWaterEnum.HIGH),;
 
   private final String type;
+  private final NeedOfWaterEnum needOfWater;
 
-  SoilTypeEnum(String type) {
+  SoilTypeEnum(String type, NeedOfWaterEnum needOfWater) {
     this.type = type;
+    this.needOfWater = needOfWater;
   }
 
   public String getType() {
@@ -37,4 +40,8 @@ public enum SoilTypeEnum {
     }
   }
 
+    @Override
+    public int getNeedOfWaterLevel() {
+        return needOfWater.getLevel();
+    }
 }

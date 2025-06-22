@@ -1,11 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.watchplant.app.entities;
 
+import com.watchplant.app.entities.keys.NotificationId;
+import com.watchplant.app.enums.NotificationTypeEnum;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -16,13 +15,14 @@ import java.util.UUID;
 @Entity
 public class Notification {
 
-  @Id
-  private UUID id;
+  @EmbeddedId
+  private NotificationId id;
+
+  private UUID userId;
 
   private LocalDateTime creationDate;
   private String message;
   private boolean isSeen;
-  private int type;
 
   /**
    * Constructor for Notification
@@ -33,29 +33,36 @@ public class Notification {
    * @throws IllegalArgumentException if creationDate or message is null, or if message is empty
    */
   public Notification(
-    LocalDateTime creationDate,
-    String message,
-    boolean isSeen,
-    int type
+          UUID userId,
+          UUID plantationId,
+          UUID plantedPlantId,
+          LocalDateTime creationDate,
+          String message,
+          boolean isSeen,
+          NotificationTypeEnum type
   ) {
-    if (creationDate == null) {
+      this.userId = userId;
+      if (creationDate == null) {
       throw new IllegalArgumentException("Creation date cannot be null");
     }
     if (message == null || message.isEmpty()) {
       throw new IllegalArgumentException("Message cannot be null or empty");
     }
-    this.id = UUID.randomUUID();
+    this.id = new NotificationId(plantationId, plantedPlantId, type);
     this.creationDate = creationDate;
     this.message = message;
     this.isSeen = isSeen;
-    this.type = type;
+  }
+
+  public Notification() {
+
   }
 
   /**
    * Gets the ID of the notification
    * @return The ID of the notification
    */
-  public UUID getId() {
+  public NotificationId getId() {
     return id;
   }
 
@@ -117,15 +124,11 @@ public class Notification {
    * Gets the type of the notification
    * @return The type of the notification
    */
-  public int getType() {
-    return type;
+  public NotificationTypeEnum getType() {
+    return this.id.getType();
   }
 
-  /**
-   * Sets the type of the notification
-   * @param type The type of the notification
-   */
-  public void setType(int type) {
-    this.type = type;
-  }
+    public UUID getUserId() {
+        return userId;
+    }
 }
