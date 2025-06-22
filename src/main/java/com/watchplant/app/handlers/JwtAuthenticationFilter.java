@@ -49,6 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (ExpiredJwtException e) {
             NonMvcResponseUtil.createResponse(response, HttpStatus.UNAUTHORIZED, "Token expirado! Faça login novamente.");
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             NonMvcResponseUtil.createResponse(response, HttpStatus.UNAUTHORIZED, "Token inválido.");
         }
     }

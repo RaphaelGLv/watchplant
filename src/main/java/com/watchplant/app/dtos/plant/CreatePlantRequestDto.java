@@ -7,8 +7,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
 /**
  * DTO for creating a {@link PlantedPlant]}.
  * Contains the required fields for creating a new plant.

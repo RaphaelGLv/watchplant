@@ -9,6 +9,8 @@ import com.watchplant.app.utils.PruningCount;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,6 +23,7 @@ public class PlantedPlant {
 
   @Id
   private UUID id;
+  private LocalDateTime plantationDate;
 
   private String scientificName;
   private String commonName;
@@ -28,7 +31,7 @@ public class PlantedPlant {
   private PlantCycleEnum cycle;
   private WateringFrequencyEnum wateringFrequency;
   private SunlightIncidenceEnum sunlightIncidence;
-  private List<MonthNamesEnum> pruningMonth;
+  private List<Month> pruningMonth;
   private Integer pruningAmount;
   private IntervalEnum pruningInterval;
   private SoilTypeEnum soilType;
@@ -36,6 +39,7 @@ public class PlantedPlant {
 
   private UUID plantationId;
   private Integer quantity;
+  private LocalDateTime lastWateringDate;
 
   /**
    * Constructor for Plant
@@ -55,13 +59,13 @@ public class PlantedPlant {
           String commonName,
           Double maxFeetHeight,
           PlantCycleEnum cycle,
-          List<MonthNamesEnum> pruningMonth,
+          List<Month> pruningMonth,
           PruningCount pruningCount,
           CareLevelEnum careLevel,
           WateringFrequencyEnum wateringFrequency,
           SunlightIncidenceEnum sunlightIncidence,
           SoilTypeEnum soilType,
-          UUID plantationId, Integer quantity
+          UUID plantationId, Integer quantity, LocalDateTime lastWateringDate
   ) {
     this.id = UUID.randomUUID();
     this.scientificName = scientificName;
@@ -77,6 +81,9 @@ public class PlantedPlant {
     this.careLevel = careLevel;
     this.plantationId = plantationId;
     this.quantity = quantity;
+    this.lastWateringDate = lastWateringDate;
+
+    this.plantationDate = LocalDateTime.now();
   }
 
   public PlantedPlant() {
@@ -207,7 +214,7 @@ public class PlantedPlant {
    * Gets the pruning month of the plant
    * @return The pruning month of the plant
    */
-  public List<MonthNamesEnum> getPruningMonth() {
+  public List<Month> getPruningMonth() {
     return pruningMonth;
   }
 
@@ -215,7 +222,7 @@ public class PlantedPlant {
    * Sets the pruning month of the plant
    * @param pruningMonth The pruning month of the plant
    */
-  public void setPruningMonth(List<MonthNamesEnum> pruningMonth) {
+  public void setPruningMonth(List<Month> pruningMonth) {
     this.pruningMonth = pruningMonth;
   }
 
@@ -265,5 +272,13 @@ public class PlantedPlant {
 
     public IntervalEnum getPruningInterval() {
         return pruningInterval;
+    }
+
+    public LocalDateTime getPlantationDate() {
+        return plantationDate;
+    }
+
+    public LocalDateTime getLastWateringDate() {
+        return lastWateringDate;
     }
 }

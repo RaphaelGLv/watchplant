@@ -5,25 +5,33 @@
 package com.watchplant.app.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.watchplant.app.interfaces.IWateringNeedParameter;
 
 /**
  *
  * @author pedro
  */
-public enum SunlightIncidenceEnum {
-  FULL_SHADE("Full Shade"),
-  PART_SHADE("Part Shade"),
-  SUN_PART_SHADE("Sun Part Shade"),
-  FULL_SUN("Full Sun");
+public enum SunlightIncidenceEnum implements IWateringNeedParameter {
+  FULL_SHADE("Full Shade", NeedOfWaterEnum.LOW),
+  PART_SHADE("Part Shade", NeedOfWaterEnum.MEDIUM),
+  SUN_PART_SHADE("Sun Part Shade", NeedOfWaterEnum.MEDIUM),
+  FULL_SUN("Full Sun", NeedOfWaterEnum.HIGH);
 
   private final String type;
+  private final NeedOfWaterEnum needOfWater;
 
-  SunlightIncidenceEnum(String type) {
+  SunlightIncidenceEnum(String type, NeedOfWaterEnum needOfWater) {
     this.type = type;
+      this.needOfWater = needOfWater;
   }
 
   public String getType() {
     return type;
+  }
+
+  @Override
+  public int getNeedOfWaterLevel() {
+    return needOfWater.getLevel();
   }
 
   @JsonCreator
