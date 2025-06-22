@@ -65,7 +65,7 @@ public class PlantService {
     List<Dimensions> plantDimensions = plantDetails.getDimensions();
 
     UUID userId = UserContext.getUserId();
-    Optional<Plantation> plantation = plantationRepository.findByIdAndOwnerId(requestBody.getPlantation().id(), userId);
+    Optional<Plantation> plantation = plantationRepository.findByIdAndOwnerId(requestBody.getPlantationId(), userId);
 
     if (plantation.isEmpty())
       throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
@@ -81,12 +81,12 @@ public class PlantService {
             requestBody.getWateringFrequency(),
             requestBody.getSunlightIncidence(),
             requestBody.getSoilType(),
-            requestBody.getPlantation().id(),
+            plantation.get().getId(),
             requestBody.getQuantity(),
             LocalDateTime.now()
     );
 
     plantedPlantRepository.save(newPlantedPlant);
-    return new CreatePlantResponseDto(newPlantedPlant, requestBody.getQuantity(), requestBody.getPlantation().name());
+    return new CreatePlantResponseDto(newPlantedPlant, requestBody.getQuantity(), plantation.get().getName());
   }
 }
