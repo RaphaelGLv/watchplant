@@ -19,12 +19,14 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
+    private final PasswordEncryptService passwordEncoder;
     private final AddressRepository addressRepository;
     private final JwtService jwtService;
 
-    AuthService(UserRepository userRepository, UserAccountRepository userAccountRepository, AddressRepository addressRepository, JwtService jwtService) {
+    AuthService(UserRepository userRepository, UserAccountRepository userAccountRepository, PasswordEncryptService passwordEncoder, AddressRepository addressRepository, JwtService jwtService) {
         this.userRepository = userRepository;
         this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
         this.addressRepository = addressRepository;
         this.jwtService = jwtService;
     }
@@ -37,7 +39,7 @@ public class AuthService {
 
         addressRepository.save(newAddress);
 
-        UserAccount newUserAccount = new UserAccount(accountBody.getEmail(), accountBody.getPassword(), 0);
+        UserAccount newUserAccount = new UserAccount(accountBody.getEmail(), passwordEncoder.encrypt(accountBody.getPassword()), 0);
 
         UserAccount userAccount = userAccountRepository.findByEmail(accountBody.getEmail());
 
@@ -50,15 +52,19 @@ public class AuthService {
     }
 
     public JwtTokenResponseDTO login(LoginRequestDTO body) throws ApplicationException {
-        UserAccount userAccount = userAccountRepository.findByEmail(body.getEmail());
+        try {
+            UserAccount userAccount = userAccountRepository.findByEmail(body.getEmail());
 
-        if (
-                userAccount == null ||
-                !userAccount.getPassword().equals(body.getPassword())
-        ) throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
+            if (
+                    userAccount == null ||
+                            !passwordEncoder.matches(body.getPassword(), userAccount.getPassword())
+            ) throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
 
-        User user = userRepository.findByAccount_Id(userAccount.getId());
+            User user = userRepository.findByAccount_Id(userAccount.getId());
 
-        return new JwtTokenResponseDTO(jwtService.generateToken(user.getId().toString()));
+            return new JwtTokenResponseDTO(jwtService.generateToken(user.getId().toString()));
+        } catch (ApplicationException e) {
+            throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
+        }
     }
 }
