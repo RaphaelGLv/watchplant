@@ -96,7 +96,7 @@ public class NotificationService {
                   false,
                   NotificationTypeEnum.HARVESTING
           );
-          notificationRepository.save(newHarvestingNotification);
+          saveNotification(newHarvestingNotification);
         }
 
         if (WateringNeedValidator.isWateringNeeded(plantedPlant)) {
@@ -109,7 +109,7 @@ public class NotificationService {
                   false,
                   NotificationTypeEnum.WATERING
           );
-          notificationRepository.save(newWateringNotification);
+          saveNotification(newWateringNotification);
         }
       }
     }
