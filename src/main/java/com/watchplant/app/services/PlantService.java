@@ -18,6 +18,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing {@link PlantedPlant} entities.
@@ -117,6 +122,73 @@ public class PlantService {
             wateringEvaluation,
             sunlightIncidenceEvaluation,
             soilTypeEvaluation
+    );
+  }
+
+  /**
+   * Updates an existing plant.
+   *
+   * @param requestBody The request containing the updated plant details.
+   * @return {@link UpdatePlantResponseDto} containing the updated plant details.
+   * @throws IllegalArgumentException if the plant is not found.
+   */
+  public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
+    PlantedPlant plant = plantedPlantRepository
+      .findById(requestBody.getId())
+      .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+
+    requestBody.getScientificName().ifPresent(plant::setScientificName);
+    requestBody.getCommonName().ifPresent(plant::setCommonName);
+    requestBody.getMaxFeetHeight().ifPresent(plant::setMaxFeetHeight);
+    requestBody.getCycle().ifPresent(plant::setCycle);
+    requestBody.getWateringFrequency().ifPresent(plant::setWateringFrequency);
+    requestBody.getSunlightIncidence().ifPresent(plant::setSunlightIncidence);
+    requestBody.getSoilType().ifPresent(plant::setSoilType);
+    requestBody.getCareLevel().ifPresent(plant::setCareLevel);
+
+    plantedPlantRepository.save(plant);
+    return new UpdatePlantResponseDto(plant);
+  }
+
+  /**
+   * Deletes a plant by ID.
+   *
+   * @param id The ID of the plant to delete.
+   * @throws IllegalArgumentException if the plant is not found.
+   */
+  public void deletePlant(UUID id) {
+    if (!plantedPlantRepository.existsById(id)) {
+      throw new IllegalArgumentException("Plant not found");
+    }
+    plantedPlantRepository.deleteById(id);
+  }
+
+  public List<GetPlantResponseDto> listPlantsByPlantationId(UUID plantationId) {
+    UUID userId = UserContext.getUserId();
+    boolean owns = plantationRepository.findByIdAndOwnerId(plantationId, userId).isPresent();
+    if (!owns) {
+      throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
+    }
+    return plantedPlantRepository.findAll().stream()
+      .filter(plant -> plantationId.equals(plant.getPlantationId()))
+      .map(GetPlantResponseDto::new)
+      .collect(Collectors.toList());
+  }
+
+  public PerenualPlantSearchResponseDto searchPlantsOnPerenual(
+      String q,
+      Integer page,
+      String order,
+      Boolean edible,
+      Boolean poisonous,
+      String cycle,
+      String watering,
+      String sunlight,
+      Boolean indoor,
+      String hardiness
+  ) {
+    return perenualService.searchPlants(
+        q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness
     );
   }
 }

@@ -8,7 +8,9 @@ import com.watchplant.app.utils.UserContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing Plantation entities.
@@ -89,5 +91,31 @@ public class PlantationService {
 
     plantationRepository.save(plantation);
     return new UpdatePlantationResponseDto(plantation);
+  }
+
+  /**
+   * Deletes a plantation by ID.
+   *
+   * @param id The ID of the plantation to delete.
+   * @throws IllegalArgumentException if the plantation is not found.
+   */
+  public void deletePlantation(UUID id) {
+    if (!plantationRepository.existsById(id)) {
+      throw new IllegalArgumentException("Plantation not found");
+    }
+    plantationRepository.deleteById(id);
+  }
+
+  /**
+   * Lists all plantations for the current user.
+   *
+   * @return A list of {@link GetPlantationResponseDto} containing the plantations of the current user.
+   */
+  public List<GetPlantationResponseDto> listPlantationsByCurrentUser() {
+    UUID userId = UserContext.getUserId();
+    return plantationRepository.findAll().stream()
+      .filter(plantation -> userId.equals(plantation.getOwnerId()))
+      .map(GetPlantationResponseDto::new)
+      .collect(Collectors.toList());
   }
 }

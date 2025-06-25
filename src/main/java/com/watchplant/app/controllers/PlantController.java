@@ -2,14 +2,18 @@ package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.plant.CreatePlantRequestDto;
 import com.watchplant.app.dtos.plant.CreatePlantResponseDto;
+import com.watchplant.app.dtos.plant.GetPlantRequestDto;
+import com.watchplant.app.dtos.plant.GetPlantResponseDto;
+import com.watchplant.app.dtos.plant.UpdatePlantRequestDto;
+import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
+import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
 import com.watchplant.app.services.PlantService;
 import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/plant")
@@ -28,5 +32,53 @@ class PlantController {
     @PostMapping("/suggestion")
     GetPlantingBestPracticesResponseDto getPlantingBestPractices(@Valid @RequestBody GetPlantingBestPracticesRequestDto requestBody) {
         return plantService.getPlantingBestPractices(requestBody);
+    }
+
+    @GetMapping("/{id}")
+    public GetPlantResponseDto getPlant(@PathVariable UUID id) {
+        return plantService.getPlant(new GetPlantRequestDto(id));
+    }
+
+    @PutMapping("/{id}")
+    public UpdatePlantResponseDto updatePlant(
+            @PathVariable UUID id,
+            @Valid @RequestBody UpdatePlantRequestDto updatePlantRequestDto
+    ) {
+        return plantService.updatePlant(
+            new UpdatePlantRequestDto(
+                id,
+                updatePlantRequestDto.getScientificName().orElse(null),
+                updatePlantRequestDto.getCommonName().orElse(null),
+                updatePlantRequestDto.getMaxFeetHeight().orElse(null),
+                updatePlantRequestDto.getCycle().orElse(null),
+                updatePlantRequestDto.getWateringFrequency().orElse(null),
+                updatePlantRequestDto.getSunlightIncidence().orElse(null),
+                updatePlantRequestDto.getPruningMonth().orElse(null),
+                updatePlantRequestDto.getPruningCountYearly().orElse(null),
+                updatePlantRequestDto.getSoilType().orElse(null),
+                updatePlantRequestDto.getCareLevel().orElse(null)
+            )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public void deletePlant(@PathVariable UUID id) {
+        plantService.deletePlant(id);
+    }
+
+    @GetMapping("/search")
+    public PerenualPlantSearchResponseDto searchPlants(
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) Integer page,
+            @RequestParam(required = false) String order,
+            @RequestParam(required = false) Boolean edible,
+            @RequestParam(required = false) Boolean poisonous,
+            @RequestParam(required = false) String cycle,
+            @RequestParam(required = false) String watering,
+            @RequestParam(required = false) String sunlight,
+            @RequestParam(required = false) Boolean indoor,
+            @RequestParam(required = false) String hardiness
+    ) {
+        return plantService.searchPlantsOnPerenual(q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness);
     }
 }
