@@ -1,6 +1,8 @@
 package com.watchplant.app.dtos.plantation;
 
 import com.watchplant.app.entities.Plantation;
+import com.watchplant.app.enums.SoilTypeEnum;
+import com.watchplant.app.enums.SunlightIncidenceEnum;
 
 /**
  * DTO for the response of fetching a plantation.
@@ -11,6 +13,9 @@ public class GetPlantationResponseDto {
   private final String name;
   private final Double sizeArea;
 
+  private final SoilTypeEnum soilType;
+  private final SunlightIncidenceEnum sunlightIncidence;
+
   /**
    * Constructor for GetPlantationResponseDto.
    *
@@ -19,6 +24,8 @@ public class GetPlantationResponseDto {
   public GetPlantationResponseDto(Plantation plantation) {
     this.name = plantation.getKey().getName();
     this.sizeArea = plantation.getSizeArea();
+    this.soilType = plantation.getSoilType();
+    this.sunlightIncidence = plantation.getSunlightIncidence();
   }
 
   /**
@@ -38,4 +45,12 @@ public class GetPlantationResponseDto {
   public Double getSizeArea() {
     return sizeArea;
   }
+
+    public SoilTypeEnum getSoilType() {
+        return soilType;
+    }
+
+    public SunlightIncidenceEnum getSunlightIncidence() {
+        return sunlightIncidence;
+    }
 }

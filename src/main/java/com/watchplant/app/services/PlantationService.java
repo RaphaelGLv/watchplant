@@ -41,7 +41,7 @@ public class PlantationService {
   public GetPlantationResponseDto getPlantation(GetPlantationRequestDto requestBody) {
     Plantation plantation = plantationRepository
       .findById(requestBody.key())
-      .orElseThrow(() -> new IllegalArgumentException("Plantation not found"));
+      .orElseThrow(() -> new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND));
     return new GetPlantationResponseDto(plantation);
   }
 
@@ -78,11 +78,10 @@ public class PlantationService {
    * @throws IllegalArgumentException if the plantation is not found.
    */
   public UpdatePlantationResponseDto updatePlantation(UpdatePlantationRequestDto requestBody) {
-    PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), requestBody.getName());
 
     Plantation plantation = plantationRepository
-      .findById(plantationKey)
-      .orElseThrow(() -> new IllegalArgumentException("Plantation not found"));
+      .findById(requestBody.getKey())
+      .orElseThrow(() -> new ApplicationException("Plantação não encontrada"));
 
     requestBody.getSizeArea().ifPresent(plantation::setSizeArea);
     requestBody.getSoilType().ifPresent(plantation::setSoilType);
@@ -92,16 +91,10 @@ public class PlantationService {
     return new UpdatePlantationResponseDto(plantation);
   }
 
-  /**
-   * Deletes a plantation by ID.
-   *
-   * @param id The ID of the plantation to delete.
-   * @throws IllegalArgumentException if the plantation is not found.
-   */
   public void deletePlantation(PlantationKey key) {
 
     if (!plantationRepository.existsById(key)) {
-      throw new IllegalArgumentException("Plantation not found");
+      throw new ApplicationException("Plantação não encontrada");
     }
     plantationRepository.deleteById(key);
   }

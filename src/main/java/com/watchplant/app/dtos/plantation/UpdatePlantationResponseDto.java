@@ -1,6 +1,9 @@
 package com.watchplant.app.dtos.plantation;
 
 import com.watchplant.app.entities.Plantation;
+import com.watchplant.app.enums.SoilTypeEnum;
+import com.watchplant.app.enums.SunlightIncidenceEnum;
+
 import java.util.UUID;
 
 /**
@@ -12,6 +15,10 @@ public class UpdatePlantationResponseDto {
   private String name;
   private Double sizeArea;
 
+  private SoilTypeEnum soilType;
+  private SunlightIncidenceEnum sunlightIncidence;
+
+
   /**
    * Constructor for UpdatePlantationResponseDto.
    *
@@ -20,6 +27,8 @@ public class UpdatePlantationResponseDto {
   public UpdatePlantationResponseDto(Plantation plantation) {
     this.name = plantation.getKey().getName();
     this.sizeArea = plantation.getSizeArea();
+    this.soilType = plantation.getSoilType();
+    this.sunlightIncidence = plantation.getSunlightIncidence();
   }
 
   public String getName() {
@@ -29,4 +38,12 @@ public class UpdatePlantationResponseDto {
   public Double getSizeArea() {
     return sizeArea;
   }
+
+    public SoilTypeEnum getSoilType() {
+        return soilType;
+    }
+
+    public SunlightIncidenceEnum getSunlightIncidence() {
+        return sunlightIncidence;
+    }
 }

@@ -22,7 +22,7 @@ class PlantationController {
         this.plantService = plantService;
     }
 
-    @PostMapping("/")
+    @PostMapping()
     public CreatePlantationResponseDto createPlantation(@Valid @RequestBody CreatePlantationRequestDto createPlantationRequestDto) {
         return this.plantationService.createPlantation(createPlantationRequestDto);
     }
@@ -34,18 +34,15 @@ class PlantationController {
         return plantationService.getPlantation(new GetPlantationRequestDto(key));
     }
 
-    @PutMapping()
+    @PutMapping("/{name}")
     public UpdatePlantationResponseDto updatePlantation(
-            @Valid @RequestBody UpdatePlantationRequestDto updatePlantationRequestDto
+            @PathVariable String name,
+            @Valid @RequestBody UpdatePlantationRequestDto requestBody
     ) {
-        return plantationService.updatePlantation(
-            new UpdatePlantationRequestDto(
-                updatePlantationRequestDto.getName(),
-                updatePlantationRequestDto.getSizeArea().orElse(null),
-                updatePlantationRequestDto.getSoilType().orElse(null),
-                updatePlantationRequestDto.getSunlightIncidence().orElse(null)
-            )
-        );
+        PlantationKey key = new PlantationKey(UserContext.getUserEmail(), name);
+        requestBody.setKey(key);
+
+        return plantationService.updatePlantation(requestBody);
     }
 
     @DeleteMapping("/{name}")
