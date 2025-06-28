@@ -3,6 +3,8 @@ package com.watchplant.app.dtos.plantation;
 import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
+import jakarta.validation.constraints.Min;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,9 +15,10 @@ import java.util.UUID;
 public class UpdatePlantationRequestDto {
   private PlantationKey key;
 
-  private Optional<Double> sizeArea;
-  private Optional<SoilTypeEnum> soilType;
-  private Optional<SunlightIncidenceEnum> sunlightIncidence;
+  @Min(value = 1, message = "A área de plantação deve ser maior ou igual a 1m²")
+  private Double sizeArea;
+  private SoilTypeEnum soilType;
+  private SunlightIncidenceEnum sunlightIncidence;
 
   /**
    * Constructor for UpdatePlantationRequestDto.
@@ -25,9 +28,9 @@ public class UpdatePlantationRequestDto {
    * @param sunlightIncidence The new sunlight incidence of the plantation (nullable).
    */
   public UpdatePlantationRequestDto(Double sizeArea, SoilTypeEnum soilType, SunlightIncidenceEnum sunlightIncidence) {
-    this.sizeArea = Optional.ofNullable(sizeArea);
-    this.soilType = Optional.ofNullable(soilType);
-    this.sunlightIncidence = Optional.ofNullable(sunlightIncidence);
+    this.sizeArea = sizeArea;
+    this.soilType = soilType;
+    this.sunlightIncidence = sunlightIncidence;
   }
 
   /**
@@ -36,7 +39,7 @@ public class UpdatePlantationRequestDto {
    * @return An Optional containing the new size area of the plantation.
    */
   public Optional<Double> getSizeArea() {
-    return sizeArea;
+    return Optional.ofNullable(sizeArea);
   }
 
   /**
@@ -45,7 +48,7 @@ public class UpdatePlantationRequestDto {
    * @return An Optional containing the new soil type of the plantation.
    */
   public Optional<SoilTypeEnum> getSoilType() {
-    return soilType;
+    return Optional.ofNullable(soilType);
   }
 
   /**
@@ -54,7 +57,7 @@ public class UpdatePlantationRequestDto {
    * @return An Optional containing the new sunlight incidence of the plantation.
    */
   public Optional<SunlightIncidenceEnum> getSunlightIncidence() {
-    return sunlightIncidence;
+    return Optional.ofNullable(sunlightIncidence);
   }
 
     public PlantationKey getKey() {
