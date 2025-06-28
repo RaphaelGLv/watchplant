@@ -7,6 +7,7 @@ import com.watchplant.app.dtos.user.UpdateUserResponseDTO;
 import com.watchplant.app.services.PlantationService;
 import com.watchplant.app.services.UserService;
 import com.watchplant.app.utils.UserContext;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,12 +39,9 @@ class UserController {
         return userService.getByEmail(email);
     }
 
-    @PutMapping("/{email}")
-    public UpdateUserResponseDTO updateUser(
-            @PathVariable String email,
-            @RequestBody UpdateUserRequestDTO updateUserRequestDTO
-    ) {
-        return userService.updateUser(email, updateUserRequestDTO);
+    @PutMapping()
+    public UpdateUserResponseDTO updateUser(@Valid @RequestBody UpdateUserRequestDTO updateUserRequestDTO) {
+        return userService.updateUser(updateUserRequestDTO);
     }
 
     @DeleteMapping("/{email}")
