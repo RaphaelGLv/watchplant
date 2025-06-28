@@ -3,7 +3,9 @@ package com.watchplant.app.repositories;
 import com.watchplant.app.entities.PlantedPlant;
 
 import java.util.List;
-import java.util.UUID;
+
+import com.watchplant.app.entities.keys.PlantationKey;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -12,6 +14,6 @@ import org.springframework.stereotype.Repository;
  * Provides CRUD operations for managing plants in the database.
  */
 @Repository
-public interface PlantedPlantRepository extends JpaRepository<PlantedPlant, UUID> {
-    List<PlantedPlant> findAllByPlantationId(UUID plantationId);
+public interface PlantedPlantRepository extends JpaRepository<PlantedPlant, PlantedPlantKey> {
+    List<PlantedPlant> findAllByKey_PlantationKey(PlantationKey plantationKey);
 }

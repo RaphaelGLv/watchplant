@@ -9,7 +9,6 @@ import java.util.UUID;
  */
 public class UpdatePlantationResponseDto {
 
-  private UUID id;
   private String name;
   private Double sizeArea;
 
@@ -19,13 +18,8 @@ public class UpdatePlantationResponseDto {
    * @param plantation The updated plantation.
    */
   public UpdatePlantationResponseDto(Plantation plantation) {
-    this.id = plantation.getId();
-    this.name = plantation.getName();
+    this.name = plantation.getKey().getName();
     this.sizeArea = plantation.getSizeArea();
-  }
-
-  public UUID getId() {
-    return id;
   }
 
   public String getName() {

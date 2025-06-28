@@ -17,15 +17,14 @@ import java.util.UUID;
 public class User {
 
   @Id
-  private UUID id;
-
-  private String name;
   private String email;
+  private String name;
   private String phone;
-  private UUID addressId;
 
-  @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "account_id", referencedColumnName = "id")
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+  private Address address;
+
+  @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
   private UserAccount account;
   /**
    * Constructor for User
@@ -34,24 +33,13 @@ public class User {
    * @param phone The phone number of the user
    * @throws IllegalArgumentException if name, email or phone is null or empty
    */
-  public User(String name, String email, String phone, UUID addressId, UserAccount account) {
-    this.id = UUID.randomUUID();
+  public User(String name, String email, String phone) {
     this.name = name;
     this.email = email;
     this.phone = phone;
-    this.account = account;
-    this.addressId = addressId;
   }
 
   public User() {}
-
-  /**
-   * Gets the ID of the user
-   * @return The ID of the user
-   */
-  public UUID getId() {
-    return id;
-  }
 
   /**
    * Gets the name of the user
@@ -109,4 +97,20 @@ public class User {
     }
     this.phone = phone;
   }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+
+    public UserAccount getAccount() {
+        return account;
+    }
+
+    public void setAccount(UserAccount account) {
+        this.account = account;
+    }
 }

@@ -5,8 +5,6 @@ import com.watchplant.app.enums.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import java.util.UUID;
-
 /**
  * DTO for creating a {@link PlantedPlant]}.
  * Contains the required fields for creating a new plant.
@@ -17,8 +15,8 @@ public class CreatePlantRequestDto {
   @Min(value = 1, message = "O id da planta deve ser maior ou igual a 1")
   private Integer plantId;
 
-  @NotNull(message = "O id da plantação é um campo obrigatório")
-  UUID plantationId;
+  @NotNull(message = "O nome da plantação é um campo obrigatório")
+  String plantationName;
 
   @NotNull(message = "A quantidade de plantas é um campo obrigatório")
   @Min(value = 1, message = "A quantidade de plantas deve ser maior ou igual a 1")
@@ -74,7 +72,7 @@ public class CreatePlantRequestDto {
     return plantationDateInMs;
   }
 
-  public UUID getPlantationId() {
-      return plantationId;
+  public String getPlantationName() {
+      return plantationName;
   }
 }

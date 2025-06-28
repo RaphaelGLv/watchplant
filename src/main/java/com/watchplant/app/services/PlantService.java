@@ -3,6 +3,8 @@ package com.watchplant.app.services;
 import com.watchplant.app.dtos.plant.*;
 import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.entities.PlantedPlant;
+import com.watchplant.app.entities.keys.PlantationKey;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
 import com.watchplant.app.enums.WateringFrequencyEnum;
@@ -17,7 +19,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.*;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -46,16 +47,9 @@ public class PlantService {
       this.perenualService = perenualService;
   }
 
-  /**
-   * Fetches a plant by its ID.
-   *
-   * @param requestBody The request containing the plant ID.
-   * @return {@link GetPlantResponseDto} containing the plant details.
-   * @throws IllegalArgumentException if the plant is not found.
-   */
-  public GetPlantResponseDto getPlant(GetPlantRequestDto requestBody) {
+  public GetPlantResponseDto getPlant(PlantedPlantKey plantedPlantKey) {
     PlantedPlant plantedPlant = plantedPlantRepository
-      .findById(requestBody.getId())
+      .findById(plantedPlantKey)
       .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
     return new GetPlantResponseDto(plantedPlant);
   }
@@ -70,13 +64,15 @@ public class PlantService {
     PerenualPlantDetailsDto plantDetails = perenualService.getPlantDetails(requestBody.getPlantId());
     List<Dimensions> plantDimensions = plantDetails.getDimensions();
 
-    UUID userId = UserContext.getUserId();
-    Optional<Plantation> plantation = plantationRepository.findByIdAndOwnerId(requestBody.getPlantationId(), userId);
+    PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), requestBody.getPlantationName());
+    Optional<Plantation> plantation = plantationRepository.findById(plantationKey);
 
     if (plantation.isEmpty())
       throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
 
+    PlantedPlantKey plantedPlantKey = new PlantedPlantKey(plantDetails.getId(), LocalDateTime.now(), plantation.get().getKey());
     PlantedPlant newPlantedPlant = new PlantedPlant(
+            plantedPlantKey,
             plantDetails.getScientificNames().stream().findFirst().orElse(null),
             plantDetails.getCommonName(),
             Objects.requireNonNull(plantDimensions.stream().findFirst().orElse(null)).maxValue(),
@@ -87,13 +83,12 @@ public class PlantService {
             requestBody.getWateringFrequency(),
             requestBody.getSunlightIncidence(),
             requestBody.getSoilType(),
-            plantation.get().getId(),
             requestBody.getQuantity(),
             LocalDateTime.now()
     );
 
     plantedPlantRepository.save(newPlantedPlant);
-    return new CreatePlantResponseDto(newPlantedPlant, requestBody.getQuantity(), plantation.get().getName());
+    return new CreatePlantResponseDto(newPlantedPlant);
   }
 
   public GetPlantingBestPracticesResponseDto getPlantingBestPractices(GetPlantingBestPracticesRequestDto requestBody) {
@@ -134,7 +129,7 @@ public class PlantService {
    */
   public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
     PlantedPlant plant = plantedPlantRepository
-      .findById(requestBody.getId())
+      .findById(requestBody.getPlantedPlantKey())
       .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
 
     requestBody.getScientificName().ifPresent(plant::setScientificName);
@@ -153,42 +148,25 @@ public class PlantService {
   /**
    * Deletes a plant by ID.
    *
-   * @param id The ID of the plant to delete.
+   * @param plantedPlantKey The ID of the plant to delete.
    * @throws IllegalArgumentException if the plant is not found.
    */
-  public void deletePlant(UUID id) {
-    if (!plantedPlantRepository.existsById(id)) {
-      throw new IllegalArgumentException("Plant not found");
-    }
-    plantedPlantRepository.deleteById(id);
+  public void deletePlant(PlantedPlantKey plantedPlantKey) {
+    plantedPlantRepository.deleteById(plantedPlantKey);
   }
 
-  public List<GetPlantResponseDto> listPlantsByPlantationId(UUID plantationId) {
-    UUID userId = UserContext.getUserId();
-    boolean owns = plantationRepository.findByIdAndOwnerId(plantationId, userId).isPresent();
+  public List<GetPlantResponseDto> listPlantsByPlantationKey(PlantationKey plantationKey) {
+    boolean owns = plantationRepository.existsById(plantationKey);
     if (!owns) {
       throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
     }
     return plantedPlantRepository.findAll().stream()
-      .filter(plant -> plantationId.equals(plant.getPlantationId()))
+      .filter(plant -> plantationKey.equals(plant.getKey().getPlantationKey()))
       .map(GetPlantResponseDto::new)
       .collect(Collectors.toList());
   }
 
-  public PerenualPlantSearchResponseDto searchPlantsOnPerenual(
-      String q,
-      Integer page,
-      String order,
-      Boolean edible,
-      Boolean poisonous,
-      String cycle,
-      String watering,
-      String sunlight,
-      Boolean indoor,
-      String hardiness
-  ) {
-    return perenualService.searchPlants(
-        q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness
-    );
+  public PerenualPlantSearchResponseDto searchPlantsOnPerenual(String q) {
+    return perenualService.searchPlants(q);
   }
 }

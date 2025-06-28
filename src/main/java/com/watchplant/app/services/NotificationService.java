@@ -39,26 +39,8 @@ public class NotificationService {
         this.plantedPlantRepository = plantedPlantRepository;
     }
 
-
-  /**
-   * Fetches a notification by ID.
-   * @param request;
-   * @return {@link GetNotificationResponseDto} containing the notification details.
-   * @throws IllegalArgumentException if the notification is not found.
-   */
-  public GetNotificationResponseDto getNotification(
-    GetNotificationRequestDto request
-  ) {
-    UUID id = request.getId();
-    Notification notification = notificationRepository
-      .findById(id)
-      .orElseThrow(() -> new IllegalArgumentException("Notification not found")
-      );
-    return new GetNotificationResponseDto(notification);
-  }
-
   public GetAllNotificationsResponseDTO getAllNotifications() {
-    List<Notification> notifications = notificationRepository.findAllByUserId(UserContext.getUserId());
+    List<Notification> notifications = notificationRepository.findAllByUserEmail(UserContext.getUserEmail());
 
     List<GetNotificationResponseDto> responseDtos = new ArrayList<>();
     for (Notification notification : notifications) {
@@ -69,11 +51,11 @@ public class NotificationService {
   }
 
   public void updateNotifications() {
-    List<Plantation> userPlantationList = plantationRepository.findAllByOwnerId(UserContext.getUserId());
+    List<Plantation> userPlantationList = plantationRepository.findAllByKey_userEmail(UserContext.getUserEmail());
 
     HashMap<Plantation, List<PlantedPlant>> plantationPlantsMap = new HashMap<>();
     for (Plantation plantation : userPlantationList) {
-      List<PlantedPlant> plantationPlants = plantedPlantRepository.findAllByPlantationId(plantation.getId());
+      List<PlantedPlant> plantationPlants = plantedPlantRepository.findAllByKey_PlantationKey(plantation.getKey());
 
       if (!plantationPlants.isEmpty())
         plantationPlantsMap.put(plantation, plantationPlants);
@@ -88,11 +70,10 @@ public class NotificationService {
 
         if (HarvestNeedValidator.isHarvestNeeded(plantedPlant)) {
           Notification newHarvestingNotification = new Notification(
-                  UserContext.getUserId(),
-                  plantation.getId(),
-                  plantedPlant.getId(),
+                  UserContext.getUserEmail(),
+                  plantedPlant.getKey(),
                   now,
-                  String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" está em época de colheita!", plantedPlant.getCommonName(), plantation.getName()),
+                  String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" está em época de colheita!", plantedPlant.getCommonName(), plantation.getKey().getName()),
                   false,
                   NotificationTypeEnum.HARVESTING
           );
@@ -101,11 +82,10 @@ public class NotificationService {
 
         if (WateringNeedValidator.isWateringNeeded(plantedPlant)) {
           Notification newWateringNotification = new Notification(
-                  UserContext.getUserId(),
-                  plantation.getId(),
-                  plantedPlant.getId(),
+                  UserContext.getUserEmail(),
+                  plantedPlant.getKey(),
                   now,
-                  String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" pode estar precisando ser regada!", plantedPlant.getCommonName(), plantation.getName()),
+                  String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" pode estar precisando ser regada!", plantedPlant.getCommonName(), plantation.getKey().getName()),
                   false,
                   NotificationTypeEnum.WATERING
           );

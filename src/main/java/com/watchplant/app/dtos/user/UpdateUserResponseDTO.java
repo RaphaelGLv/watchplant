@@ -4,24 +4,14 @@ import com.watchplant.app.entities.User;
 import java.util.UUID;
 
 public class UpdateUserResponseDTO {
-    private UUID id;
     private String name;
     private String email;
     private String phone;
 
     public UpdateUserResponseDTO(User user) {
-        this.id = user.getId();
         this.name = user.getName();
         this.email = user.getEmail();
         this.phone = user.getPhone();
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public String getEmail() {
@@ -30,5 +20,9 @@ public class UpdateUserResponseDTO {
 
     public String getPhone() {
         return phone;
+    }
+
+    public String getName() {
+        return name;
     }
 }

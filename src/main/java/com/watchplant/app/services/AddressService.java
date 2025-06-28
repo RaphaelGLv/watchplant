@@ -4,14 +4,12 @@
  */
 package com.watchplant.app.services;
 
-import com.watchplant.app.dtos.address.CreateAddressRequestDto;
-import com.watchplant.app.dtos.address.CreateAddressResponseDto;
-import com.watchplant.app.dtos.address.GetAddressRequestDto;
 import com.watchplant.app.dtos.address.GetAddressResponseDto;
 import com.watchplant.app.dtos.address.UpdateAddressRequestDto;
 import com.watchplant.app.dtos.address.UpdateAddressResponseDto;
 import com.watchplant.app.entities.Address;
 import com.watchplant.app.repositories.AddressRepository;
+import com.watchplant.app.utils.UserContext;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,41 +21,14 @@ public class AddressService {
 
   private AddressRepository addressRepository;
 
-  /**
-   * Gets the address by id
-   * @param requestBody
-   * @return {@link GetAddressResponseDto} containing the address
-   * @throws IllegalArgumentException if the address is not found
-   */
-  public GetAddressResponseDto getAddress(GetAddressRequestDto requestBody) {
+  public GetAddressResponseDto getAddress() {
     Address address = addressRepository
-      .findById(requestBody.getId())
+      .findById(UserContext.getUserEmail())
       .orElse(null);
     if (address == null) {
       throw new IllegalArgumentException("Address not found");
     }
     return new GetAddressResponseDto(address);
-  }
-
-  /**
-   * Creates a new address
-   * @param requestBody
-   * @return {@link CreateAddressResponseDto} containing the created address
-   * @throws IllegalArgumentException if the address is not found
-   */
-  public CreateAddressResponseDto createAddress(
-    CreateAddressRequestDto requestBody
-  ) {
-    Address address = new Address(
-      requestBody.getZipCode(),
-      requestBody.getStreet(),
-      requestBody.getNumber(),
-      requestBody.getNeighborhood()
-    );
-
-    addressRepository.save(address);
-
-    return new CreateAddressResponseDto(address);
   }
 
   /**
@@ -70,7 +41,7 @@ public class AddressService {
     UpdateAddressRequestDto requestBody
   ) {
     Address address = addressRepository
-      .findById(requestBody.getId())
+      .findById(UserContext.getUserEmail())
       .orElse(null);
     if (address == null) {
       throw new IllegalArgumentException("Address not found");

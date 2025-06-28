@@ -29,26 +29,25 @@ public class UserService {
         return userResponseDTOList;
     }
 
-    public GetUserResponseDTO getById(UUID id) {
-        User user = userRepository.findById(id)
+    public GetUserResponseDTO getByEmail(String email) {
+        User user = userRepository.findById(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
         return new GetUserResponseDTO(user);
     }
 
-    public UpdateUserResponseDTO updateUser(UUID id, UpdateUserRequestDTO dto) {
-        User user = userRepository.findById(id)
+    public UpdateUserResponseDTO updateUser(String email, UpdateUserRequestDTO dto) {
+        User user = userRepository.findById(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found"));
         dto.getName().ifPresent(user::setName);
-        dto.getEmail().ifPresent(user::setEmail);
         userRepository.save(user);
         return new UpdateUserResponseDTO(user);
     }
 
-    public void deleteUser(UUID id) {
-        if (!userRepository.existsById(id)) {
+    public void deleteUser(String email) {
+        if (!userRepository.existsById(email)) {
             throw new IllegalArgumentException("User not found");
         }
-        userRepository.deleteById(id);
+        userRepository.deleteById(email);
     }
 
 }

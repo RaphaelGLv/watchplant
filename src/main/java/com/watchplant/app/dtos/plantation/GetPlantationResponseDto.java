@@ -17,7 +17,7 @@ public class GetPlantationResponseDto {
    * @param plantation The fetched plantation.
    */
   public GetPlantationResponseDto(Plantation plantation) {
-    this.name = plantation.getName();
+    this.name = plantation.getKey().getName();
     this.sizeArea = plantation.getSizeArea();
   }
 

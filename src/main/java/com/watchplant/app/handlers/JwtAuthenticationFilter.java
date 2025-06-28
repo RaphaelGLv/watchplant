@@ -40,9 +40,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
                 jwtToken = authHeader.substring("Bearer ".length());
 
-                UUID userId = jwtService.extractUserId(jwtToken);
+                String userEmail = jwtService.extractUserId(jwtToken);
 
-                UserContext.setUserId(userId);
+                UserContext.setUserId(userEmail);
             }
 
             filterChain.doFilter(request, response);

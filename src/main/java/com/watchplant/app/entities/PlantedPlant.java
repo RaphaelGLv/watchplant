@@ -4,15 +4,15 @@
  */
 package com.watchplant.app.entities;
 
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.enums.*;
 import com.watchplant.app.utils.PruningCount;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
-import java.util.UUID;
 
 /**
  *
@@ -21,9 +21,8 @@ import java.util.UUID;
 @Entity
 public class PlantedPlant {
 
-  @Id
-  private UUID id;
-  private LocalDateTime plantationDate;
+  @EmbeddedId
+  private PlantedPlantKey key;
 
   private String scientificName;
   private String commonName;
@@ -37,7 +36,6 @@ public class PlantedPlant {
   private SoilTypeEnum soilType;
   private CareLevelEnum careLevel;
 
-  private UUID plantationId;
   private Integer quantity;
   private LocalDateTime lastWateringDate;
 
@@ -55,6 +53,7 @@ public class PlantedPlant {
    * @throws IllegalArgumentException if scientificName or commonName is null or empty, or if maxFeetHeight is null or negative
    */
   public PlantedPlant(
+          PlantedPlantKey plantedPlantKey,
           String scientificName,
           String commonName,
           Double maxFeetHeight,
@@ -65,9 +64,10 @@ public class PlantedPlant {
           WateringFrequencyEnum wateringFrequency,
           SunlightIncidenceEnum sunlightIncidence,
           SoilTypeEnum soilType,
-          UUID plantationId, Integer quantity, LocalDateTime lastWateringDate
+          Integer quantity,
+          LocalDateTime lastWateringDate
   ) {
-    this.id = UUID.randomUUID();
+    this.key = plantedPlantKey;
     this.scientificName = scientificName;
     this.commonName = commonName;
     this.maxFeetHeight = maxFeetHeight;
@@ -79,23 +79,12 @@ public class PlantedPlant {
     this.pruningInterval = pruningCount.interval();
     this.soilType = soilType;
     this.careLevel = careLevel;
-    this.plantationId = plantationId;
     this.quantity = quantity;
     this.lastWateringDate = lastWateringDate;
-
-    this.plantationDate = LocalDateTime.now();
   }
 
   public PlantedPlant() {
 
-  }
-
-  /**
-   * Gets the ID of the plant
-   * @return The ID of the plant
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -258,10 +247,6 @@ public class PlantedPlant {
     this.careLevel = careLevel;
   }
 
-    public UUID getPlantationId() {
-        return plantationId;
-    }
-
     public Integer getQuantity() {
         return quantity;
     }
@@ -274,11 +259,11 @@ public class PlantedPlant {
         return pruningInterval;
     }
 
-    public LocalDateTime getPlantationDate() {
-        return plantationDate;
-    }
-
     public LocalDateTime getLastWateringDate() {
         return lastWateringDate;
+    }
+
+    public PlantedPlantKey getKey() {
+        return key;
     }
 }

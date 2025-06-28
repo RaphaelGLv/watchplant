@@ -10,4 +10,4 @@ import org.springframework.stereotype.Repository;
  * Provides CRUD operations for Address.
  */
 @Repository
-public interface AddressRepository extends JpaRepository<Address, UUID> {}
+public interface AddressRepository extends JpaRepository<Address, String> {}

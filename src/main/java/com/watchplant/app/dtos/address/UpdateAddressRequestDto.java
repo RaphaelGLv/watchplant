@@ -13,7 +13,6 @@ import java.util.UUID;
  */
 public class UpdateAddressRequestDto {
 
-  private UUID id;
   private Optional<String> zipCode;
   private Optional<String> street;
   private Optional<String> number;
@@ -22,32 +21,21 @@ public class UpdateAddressRequestDto {
   /**
    * Constructor for UpdateAddressRequestDto
    *
-   * @param id The id of the address
    * @param zipCode The zip code of the address (nullable)
    * @param street The street of the address (nullable)
    * @param number The number of the address (nullable)
    * @param neighborhood The neighborhood of the address (nullable)
    */
   public UpdateAddressRequestDto(
-    UUID id,
     String zipCode,
     String street,
     String number,
     String neighborhood
   ) {
-    this.id = id;
     this.zipCode = Optional.ofNullable(zipCode);
     this.street = Optional.ofNullable(street);
     this.number = Optional.ofNullable(number);
     this.neighborhood = Optional.ofNullable(neighborhood);
-  }
-
-  /**
-   * Gets the id of the address
-   * @return The id of the address
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**

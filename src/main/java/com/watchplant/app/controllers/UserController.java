@@ -6,10 +6,10 @@ import com.watchplant.app.dtos.user.UpdateUserRequestDTO;
 import com.watchplant.app.dtos.user.UpdateUserResponseDTO;
 import com.watchplant.app.services.PlantationService;
 import com.watchplant.app.services.UserService;
+import com.watchplant.app.utils.UserContext;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/user")
@@ -27,22 +27,28 @@ class UserController {
         return userService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public GetUserResponseDTO getById(@PathVariable UUID id) {
-        return userService.getById(id);
+    @GetMapping("/{email}")
+    public GetUserResponseDTO getByEmail(@PathVariable String email) {
+        return userService.getByEmail(email);
     }
 
-    @PutMapping("/{id}")
+    @GetMapping("/me")
+    public GetUserResponseDTO getMe() {
+        String email = UserContext.getUserEmail();
+        return userService.getByEmail(email);
+    }
+
+    @PutMapping("/{email}")
     public UpdateUserResponseDTO updateUser(
-            @PathVariable UUID id,
+            @PathVariable String email,
             @RequestBody UpdateUserRequestDTO updateUserRequestDTO
     ) {
-        return userService.updateUser(id, updateUserRequestDTO);
+        return userService.updateUser(email, updateUserRequestDTO);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable UUID id) {
-        userService.deleteUser(id);
+    @DeleteMapping("/{email}")
+    public void deleteUser(@PathVariable String email) {
+        userService.deleteUser(email);
     }
 
     @GetMapping("/plantations")

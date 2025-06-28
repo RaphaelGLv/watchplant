@@ -13,23 +13,14 @@ import java.util.UUID;
  */
 public class CreateAddressResponseDto {
 
-  private UUID id;
+  private String userEmail;
   private String zipCode;
   private String street;
   private String number;
   private String neighborhood;
 
-  /**
-   * Constructor for CreateAddressRequestDto
-   *
-   * @param id The id of the address
-   * @param zipCode The zip code of the address
-   * @param street The street of the address
-   * @param number The number of the address
-   * @param neighborhood The neighborhood of the address
-   */
   public CreateAddressResponseDto(Address address) {
-    this.id = address.getId();
+    this.userEmail = address.getUserEmail();
     this.zipCode = address.getZipCode();
     this.street = address.getStreet();
     this.number = address.getNumber();
@@ -40,8 +31,8 @@ public class CreateAddressResponseDto {
    * Gets the id of the address
    * @return The id of the address
    */
-  public UUID getId() {
-    return id;
+  public String getUserEmail() {
+    return userEmail;
   }
 
   /**

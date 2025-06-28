@@ -1,31 +1,29 @@
 package com.watchplant.app.dtos.plant;
 
+import com.watchplant.app.entities.keys.PlantationKey;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.enums.*;
 import java.util.Optional;
 import java.util.UUID;
 
-/**
- * DTO for updating a {@link Plant}.
- * Contains optional fields for updating specific attributes of a plant.
- */
 public class UpdatePlantRequestDto {
 
-  private UUID id;
-  private Optional<String> scientificName;
-  private Optional<String> commonName;
-  private Optional<Double> maxFeetHeight;
-  private Optional<PlantCycleEnum> cycle;
-  private Optional<WateringFrequencyEnum> wateringFrequency;
-  private Optional<SunlightIncidenceEnum> sunlightIncidence;
-  private Optional<Integer> pruningMonth;
-  private Optional<Integer> pruningCountYearly;
-  private Optional<SoilTypeEnum> soilType;
-  private Optional<CareLevelEnum> careLevel;
+  private PlantedPlantKey plantedPlantKey;
+  private final Optional<String> scientificName;
+  private final Optional<String> commonName;
+  private final Optional<Double> maxFeetHeight;
+  private final Optional<PlantCycleEnum> cycle;
+  private final Optional<WateringFrequencyEnum> wateringFrequency;
+  private final Optional<SunlightIncidenceEnum> sunlightIncidence;
+  private final Optional<Integer> pruningMonth;
+  private final Optional<Integer> pruningCountYearly;
+  private final Optional<SoilTypeEnum> soilType;
+  private final Optional<CareLevelEnum> careLevel;
 
   /**
    * Constructor for {@link UpdatePlantRequestDto}.
    *
-   * @param id The ID of the plant to update.
+   * @param plantedPlantKey The ID of the plant to update.
    * @param scientificName The new scientific name of the plant (nullable).
    * @param commonName The new common name of the plant (nullable).
    * @param maxFeetHeight The new maximum height of the plant in feet (nullable).
@@ -38,7 +36,7 @@ public class UpdatePlantRequestDto {
    * @param careLevel The new care level of the plant (nullable).
    */
   public UpdatePlantRequestDto(
-    UUID id,
+    PlantedPlantKey plantedPlantKey,
     String scientificName,
     String commonName,
     Double maxFeetHeight,
@@ -50,7 +48,7 @@ public class UpdatePlantRequestDto {
     SoilTypeEnum soilType,
     CareLevelEnum careLevel
   ) {
-    this.id = id;
+    this.plantedPlantKey = plantedPlantKey;
     this.scientificName = Optional.ofNullable(scientificName);
     this.commonName = Optional.ofNullable(commonName);
     this.maxFeetHeight = Optional.ofNullable(maxFeetHeight);
@@ -68,8 +66,8 @@ public class UpdatePlantRequestDto {
    *
    * @return The ID of the plant.
    */
-  public UUID getId() {
-    return id;
+  public PlantedPlantKey getPlantedPlantKey() {
+    return plantedPlantKey;
   }
 
   /**

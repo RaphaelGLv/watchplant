@@ -4,8 +4,8 @@
  */
 package com.watchplant.app.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
 import java.util.UUID;
 
 /**
@@ -16,12 +16,17 @@ import java.util.UUID;
 public class Address {
 
   @Id
-  private UUID id;
+  private String userEmail;
 
   private String zipCode;
   private String street;
   private String number;
   private String neighborhood;
+
+  @OneToOne
+  @MapsId
+  @JoinColumn(name = "userEmail")
+  private User user;
 
   /**
    * Constructor for Address
@@ -35,25 +40,18 @@ public class Address {
     String zipCode,
     String street,
     String number,
-    String neighborhood
+    String neighborhood,
+    User user
   ) {
-    this.id = UUID.randomUUID();
     this.zipCode = zipCode;
     this.street = street;
     this.number = number;
     this.neighborhood = neighborhood;
+    this.user = user;
   }
 
   public Address() {
     
-  }
-
-  /**
-   * Gets the id of the address
-   * @return The id of the address
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -133,4 +131,8 @@ public class Address {
     }
     this.neighborhood = neighborhood;
   }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
 }

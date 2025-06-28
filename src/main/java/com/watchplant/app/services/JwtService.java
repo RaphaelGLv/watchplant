@@ -21,8 +21,8 @@ public class JwtService {
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
-    public UUID extractUserId(String token) {
-        return UUID.fromString(extractClaim(token, Claims::getSubject));
+    public String extractUserId(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

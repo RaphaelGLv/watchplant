@@ -12,7 +12,6 @@ import java.util.UUID;
  */
 public class CreatePlantationResponseDto {
 
-  private UUID id;
   @NotBlank(message = "O nome da plantação é um campo obrigatório")
   private String name;
 
@@ -31,15 +30,10 @@ public class CreatePlantationResponseDto {
    * @param plantation The created plantation.
    */
   public CreatePlantationResponseDto(Plantation plantation) {
-    this.id = plantation.getId();
-    this.name = plantation.getName();
+    this.name = plantation.getKey().getName();
     this.sizeArea = plantation.getSizeArea();
     this.soilType = plantation.getSoilType();
     this.sunlightIncidence = plantation.getSunlightIncidence();
-  }
-
-  public UUID getId() {
-    return id;
   }
 
   /**

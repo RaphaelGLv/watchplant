@@ -1,29 +1,16 @@
 package com.watchplant.app.dtos.plant;
 
-import java.util.UUID;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 
-/**
- * DTO for fetching a {@link Plant} by ID.
- */
+
 public class GetPlantRequestDto {
 
-  private UUID id;
+  private PlantedPlantKey key;
 
-  /**
-   * Constructor for {@link GetPlantRequestDto}.
-   *
-   * @param id The ID of the plant to fetch.
-   */
-  public GetPlantRequestDto(UUID id) {
-    this.id = id;
+  public GetPlantRequestDto(PlantedPlantKey key) {
+    this.key = key;
   }
-
-  /**
-   * Gets the ID of the plant.
-   *
-   * @return The ID of the plant.
-   */
-  public UUID getId() {
-    return id;
+  public PlantedPlantKey getKey() {
+    return key;
   }
 }

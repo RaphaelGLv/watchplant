@@ -35,36 +35,45 @@ public class AuthService {
         CreateUserAccountRequestDTO accountBody = body.getAccount();
         CreateAddressRequestDto addressBody = body.getAddress();
 
-        Address newAddress = new Address(addressBody.getZipCode(), addressBody.getStreet(), addressBody.getNumber(), addressBody.getNeighborhood());
+        boolean userAccountExists = userAccountRepository.existsById(accountBody.getEmail());
+        if (userAccountExists) throw new ApplicationException("O email já foi utilizado", HttpStatus.CONFLICT);
 
-        addressRepository.save(newAddress);
+        User newUser = new User(body.getName(), accountBody.getEmail(), body.getPhone());
 
-        UserAccount newUserAccount = new UserAccount(accountBody.getEmail(), passwordEncoder.encrypt(accountBody.getPassword()), 0);
+        Address newAddress = new Address(addressBody.getZipCode(), addressBody.getStreet(), addressBody.getNumber(), addressBody.getNeighborhood(), newUser);
+        newUser.setAddress(newAddress);
 
-        UserAccount userAccount = userAccountRepository.findByEmail(accountBody.getEmail());
+        UserAccount newUserAccount = new UserAccount(passwordEncoder.encrypt(accountBody.getPassword()), newUser);
+        newUser.setAccount(newUserAccount);
 
-        if (userAccount != null) throw new ApplicationException("O email já foi utilizado", HttpStatus.CONFLICT);
-
-        User newUser = new User(body.getName(), accountBody.getEmail(), body.getPhone(), newAddress.getId(), newUserAccount);
         userRepository.save(newUser);
 
-        return new JwtTokenResponseDTO(jwtService.generateToken(newUser.getId().toString()));
+        return new JwtTokenResponseDTO(jwtService.generateToken(newUserAccount.getEmail()));
     }
 
     public JwtTokenResponseDTO login(LoginRequestDTO body) throws ApplicationException {
         try {
-            UserAccount userAccount = userAccountRepository.findByEmail(body.getEmail());
+            UserAccount userAccount = userAccountRepository.findById(body.getEmail()).orElseThrow(() ->
+                            new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED)
+                    );
 
-            if (
-                    userAccount == null ||
-                            !passwordEncoder.matches(body.getPassword(), userAccount.getPassword())
-            ) throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
+            if (userAccount.isBlocked())
+                throw new ApplicationException("Conta bloqueada por excesso de tentativas.", HttpStatus.UNAUTHORIZED);
 
-            User user = userRepository.findByAccount_Id(userAccount.getId());
+            if (!passwordEncoder.matches(body.getPassword(), userAccount.getPassword())) {
+                this.incrementLoginTries(userAccount);
+                throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
+            }
 
-            return new JwtTokenResponseDTO(jwtService.generateToken(user.getId().toString()));
+
+            return new JwtTokenResponseDTO(jwtService.generateToken(userAccount.getEmail()));
         } catch (ApplicationException e) {
             throw new ApplicationException("Email ou senha estão incorretos.", HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    private void incrementLoginTries(UserAccount userAccount) {
+        userAccount.incrementLoginTries();
+        userAccountRepository.save(userAccount);
     }
 }

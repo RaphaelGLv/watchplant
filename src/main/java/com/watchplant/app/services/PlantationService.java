@@ -2,6 +2,7 @@ package com.watchplant.app.services;
 
 import com.watchplant.app.dtos.plantation.*;
 import com.watchplant.app.entities.Plantation;
+import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.repositories.PlantationRepository;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import com.watchplant.app.utils.UserContext;
@@ -39,7 +40,7 @@ public class PlantationService {
    */
   public GetPlantationResponseDto getPlantation(GetPlantationRequestDto requestBody) {
     Plantation plantation = plantationRepository
-      .findById(requestBody.getId())
+      .findById(requestBody.key())
       .orElseThrow(() -> new IllegalArgumentException("Plantation not found"));
     return new GetPlantationResponseDto(plantation);
   }
@@ -51,25 +52,22 @@ public class PlantationService {
    * @return {@link CreatePlantationResponseDto} containing the created plantation details.
    */
   public CreatePlantationResponseDto createPlantation(CreatePlantationRequestDto requestBody) {
-    UUID userId = UserContext.getUserId();
+    String userEmail = UserContext.getUserEmail();
 
-    boolean isPlantationExists = this.existsPlantationByOwnerIdAndName(userId, requestBody.getName());
+    PlantationKey plantationKey = new PlantationKey(userEmail, requestBody.getName());
+
+    boolean isPlantationExists = plantationRepository.existsById(plantationKey);
 
     if (isPlantationExists) throw new ApplicationException("Você já possui uma plantação com esse nome!", HttpStatus.CONFLICT);
 
     Plantation plantation = new Plantation(
-      userId,
-      requestBody.getName(),
+      plantationKey,
       requestBody.getSizeArea(),
       requestBody.getSoilType(),
       requestBody.getSunlightIncidence()
     );
     plantationRepository.save(plantation);
     return new CreatePlantationResponseDto(plantation);
-  }
-
-  private boolean existsPlantationByOwnerIdAndName(UUID ownerId, String plantationName) {
-    return plantationRepository.existsByOwnerIdAndName(ownerId, plantationName);
   }
 
   /**
@@ -80,11 +78,12 @@ public class PlantationService {
    * @throws IllegalArgumentException if the plantation is not found.
    */
   public UpdatePlantationResponseDto updatePlantation(UpdatePlantationRequestDto requestBody) {
+    PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), requestBody.getName());
+
     Plantation plantation = plantationRepository
-      .findById(requestBody.getId())
+      .findById(plantationKey)
       .orElseThrow(() -> new IllegalArgumentException("Plantation not found"));
 
-    requestBody.getName().ifPresent(plantation::setName);
     requestBody.getSizeArea().ifPresent(plantation::setSizeArea);
     requestBody.getSoilType().ifPresent(plantation::setSoilType);
     requestBody.getSunlightIncidence().ifPresent(plantation::setSunlightIncidence);
@@ -99,11 +98,12 @@ public class PlantationService {
    * @param id The ID of the plantation to delete.
    * @throws IllegalArgumentException if the plantation is not found.
    */
-  public void deletePlantation(UUID id) {
-    if (!plantationRepository.existsById(id)) {
+  public void deletePlantation(PlantationKey key) {
+
+    if (!plantationRepository.existsById(key)) {
       throw new IllegalArgumentException("Plantation not found");
     }
-    plantationRepository.deleteById(id);
+    plantationRepository.deleteById(key);
   }
 
   /**
@@ -112,9 +112,9 @@ public class PlantationService {
    * @return A list of {@link GetPlantationResponseDto} containing the plantations of the current user.
    */
   public List<GetPlantationResponseDto> listPlantationsByCurrentUser() {
-    UUID userId = UserContext.getUserId();
+    String userEmail = UserContext.getUserEmail();
     return plantationRepository.findAll().stream()
-      .filter(plantation -> userId.equals(plantation.getOwnerId()))
+      .filter(plantation -> userEmail.equals(plantation.getKey().getUserEmail()))
       .map(GetPlantationResponseDto::new)
       .collect(Collectors.toList());
   }

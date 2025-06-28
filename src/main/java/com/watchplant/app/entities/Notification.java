@@ -1,7 +1,10 @@
 package com.watchplant.app.entities;
 
-import com.watchplant.app.entities.keys.NotificationId;
+import com.watchplant.app.entities.keys.NotificationKey;
+import com.watchplant.app.entities.keys.PlantationKey;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.enums.NotificationTypeEnum;
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 
@@ -16,9 +19,10 @@ import java.util.UUID;
 public class Notification {
 
   @EmbeddedId
-  private NotificationId id;
+  private NotificationKey key;
 
-  private UUID userId;
+  @Column(insertable=false, updatable=false)
+  private String userEmail;
 
   private LocalDateTime creationDate;
   private String message;
@@ -33,22 +37,15 @@ public class Notification {
    * @throws IllegalArgumentException if creationDate or message is null, or if message is empty
    */
   public Notification(
-          UUID userId,
-          UUID plantationId,
-          UUID plantedPlantId,
+          String userEmail,
+          PlantedPlantKey plantedPlantKey,
           LocalDateTime creationDate,
           String message,
           boolean isSeen,
           NotificationTypeEnum type
   ) {
-      this.userId = userId;
-      if (creationDate == null) {
-      throw new IllegalArgumentException("Creation date cannot be null");
-    }
-    if (message == null || message.isEmpty()) {
-      throw new IllegalArgumentException("Message cannot be null or empty");
-    }
-    this.id = new NotificationId(plantationId, plantedPlantId, type);
+    this.userEmail = userEmail;
+    this.key = new NotificationKey(plantedPlantKey, type);
     this.creationDate = creationDate;
     this.message = message;
     this.isSeen = isSeen;
@@ -62,8 +59,8 @@ public class Notification {
    * Gets the ID of the notification
    * @return The ID of the notification
    */
-  public NotificationId getId() {
-    return id;
+  public NotificationKey getKey() {
+    return key;
   }
 
   /**
@@ -125,10 +122,10 @@ public class Notification {
    * @return The type of the notification
    */
   public NotificationTypeEnum getType() {
-    return this.id.getType();
+    return this.key.getType();
   }
 
-    public UUID getUserId() {
-        return userId;
+    public String getUserEmail() {
+        return userEmail;
     }
 }

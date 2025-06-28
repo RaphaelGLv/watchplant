@@ -3,24 +3,24 @@ package com.watchplant.app.utils;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import org.springframework.http.HttpStatus;
 
-import java.util.UUID;
+import java.lang.String;
 
 public class UserContext {
-    private static final ThreadLocal<UUID> userIdHolder = new ThreadLocal<>();
+    private static final ThreadLocal<String> userEmailHolder = new ThreadLocal<>();
 
-    public static void setUserId(UUID userId) {
-        userIdHolder.set(userId);
+    public static void setUserId(String userEmail) {
+        userEmailHolder.set(userEmail);
     }
 
-    public static UUID getUserId() {
-        UUID userId = userIdHolder.get();
+    public static String getUserEmail() {
+        String userEmail = userEmailHolder.get();
 
-        if (userId == null) throw new ApplicationException("Usuário não autenticado", HttpStatus.UNAUTHORIZED);
+        if (userEmail == null) throw new ApplicationException("Usuário não autenticado", HttpStatus.UNAUTHORIZED);
 
-        return userId;
+        return userEmail;
     }
 
     public static void clear() {
-        userIdHolder.remove();
+        userEmailHolder.remove();
     }
 }

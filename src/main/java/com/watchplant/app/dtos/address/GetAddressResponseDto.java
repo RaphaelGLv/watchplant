@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class GetAddressResponseDto {
 
-  private UUID id;
+  private String userEmail;
   private String zipCode;
   private String street;
   private String number;
@@ -25,7 +25,7 @@ public class GetAddressResponseDto {
    * @param address The fetched address.
    */
   public GetAddressResponseDto(Address address) {
-    this.id = address.getId();
+    this.userEmail = address.getUserEmail();
     this.zipCode = address.getZipCode();
     this.street = address.getStreet();
     this.number = address.getNumber();
@@ -37,8 +37,8 @@ public class GetAddressResponseDto {
    *
    * @return The ID of the address.
    */
-  public UUID getId() {
-    return id;
+  public String getUserEmail() {
+    return userEmail;
   }
 
   /**

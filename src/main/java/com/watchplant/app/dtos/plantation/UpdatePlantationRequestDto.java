@@ -11,8 +11,7 @@ import java.util.UUID;
  */
 public class UpdatePlantationRequestDto {
 
-  private UUID id;
-  private Optional<String> name;
+  private String name;
   private Optional<Double> sizeArea;
   private Optional<SoilTypeEnum> soilType;
   private Optional<SunlightIncidenceEnum> sunlightIncidence;
@@ -20,27 +19,16 @@ public class UpdatePlantationRequestDto {
   /**
    * Constructor for UpdatePlantationRequestDto.
    *
-   * @param id The ID of the plantation to update.
    * @param name The new name of the plantation (nullable).
    * @param sizeArea The new size area of the plantation (nullable).
    * @param soilType The new soil type of the plantation (nullable).
    * @param sunlightIncidence The new sunlight incidence of the plantation (nullable).
    */
-  public UpdatePlantationRequestDto(UUID id, String name, Double sizeArea, SoilTypeEnum soilType, SunlightIncidenceEnum sunlightIncidence) {
-    this.id = id;
-    this.name = Optional.ofNullable(name);
+  public UpdatePlantationRequestDto(String name, Double sizeArea, SoilTypeEnum soilType, SunlightIncidenceEnum sunlightIncidence) {
+    this.name = name;
     this.sizeArea = Optional.ofNullable(sizeArea);
     this.soilType = Optional.ofNullable(soilType);
     this.sunlightIncidence = Optional.ofNullable(sunlightIncidence);
-  }
-
-  /**
-   * Gets the ID of the plantation.
-   *
-   * @return The ID of the plantation.
-   */
-  public UUID getId() {
-    return id;
   }
 
   /**
@@ -48,7 +36,7 @@ public class UpdatePlantationRequestDto {
    *
    * @return An Optional containing the new name of the plantation.
    */
-  public Optional<String> getName() {
+  public String getName() {
     return name;
   }
 

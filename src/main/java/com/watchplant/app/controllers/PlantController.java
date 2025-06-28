@@ -9,11 +9,11 @@ import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
 import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.services.PlantService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/plant")
@@ -34,19 +34,19 @@ class PlantController {
         return plantService.getPlantingBestPractices(requestBody);
     }
 
-    @GetMapping("/{id}")
-    public GetPlantResponseDto getPlant(@PathVariable UUID id) {
-        return plantService.getPlant(new GetPlantRequestDto(id));
+    @GetMapping("/{key}")
+    public GetPlantResponseDto getPlant(@PathVariable PlantedPlantKey key) {
+        return plantService.getPlant(key);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{key}")
     public UpdatePlantResponseDto updatePlant(
-            @PathVariable UUID id,
+            @PathVariable PlantedPlantKey key,
             @Valid @RequestBody UpdatePlantRequestDto updatePlantRequestDto
     ) {
         return plantService.updatePlant(
             new UpdatePlantRequestDto(
-                id,
+                key,
                 updatePlantRequestDto.getScientificName().orElse(null),
                 updatePlantRequestDto.getCommonName().orElse(null),
                 updatePlantRequestDto.getMaxFeetHeight().orElse(null),
@@ -61,24 +61,13 @@ class PlantController {
         );
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePlant(@PathVariable UUID id) {
-        plantService.deletePlant(id);
+    @DeleteMapping("/{key}")
+    public void deletePlant(@PathVariable PlantedPlantKey key) {
+        plantService.deletePlant(key);
     }
 
     @GetMapping("/search")
-    public PerenualPlantSearchResponseDto searchPlants(
-            @RequestParam(required = false) String q,
-            @RequestParam(required = false) Integer page,
-            @RequestParam(required = false) String order,
-            @RequestParam(required = false) Boolean edible,
-            @RequestParam(required = false) Boolean poisonous,
-            @RequestParam(required = false) String cycle,
-            @RequestParam(required = false) String watering,
-            @RequestParam(required = false) String sunlight,
-            @RequestParam(required = false) Boolean indoor,
-            @RequestParam(required = false) String hardiness
-    ) {
-        return plantService.searchPlantsOnPerenual(q, page, order, edible, poisonous, cycle, watering, sunlight, indoor, hardiness);
+    public PerenualPlantSearchResponseDto searchPlants(@RequestParam(required = false) String q) {
+        return plantService.searchPlantsOnPerenual(q);
     }
 }

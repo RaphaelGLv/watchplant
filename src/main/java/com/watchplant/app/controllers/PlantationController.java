@@ -2,13 +2,14 @@ package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.plant.GetPlantResponseDto;
 import com.watchplant.app.dtos.plantation.*;
+import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.services.PlantService;
 import com.watchplant.app.services.PlantationService;
+import com.watchplant.app.utils.UserContext;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/plantation")
@@ -26,20 +27,20 @@ class PlantationController {
         return this.plantationService.createPlantation(createPlantationRequestDto);
     }
 
-    @GetMapping("/{id}")
-    public GetPlantationResponseDto getPlantation(@PathVariable UUID id) {
-        return plantationService.getPlantation(new GetPlantationRequestDto(id));
+    @GetMapping("/{name}")
+    public GetPlantationResponseDto getPlantation(@PathVariable String name) {
+        PlantationKey key = new PlantationKey(UserContext.getUserEmail(), name);
+
+        return plantationService.getPlantation(new GetPlantationRequestDto(key));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping()
     public UpdatePlantationResponseDto updatePlantation(
-            @PathVariable UUID id,
             @Valid @RequestBody UpdatePlantationRequestDto updatePlantationRequestDto
     ) {
         return plantationService.updatePlantation(
             new UpdatePlantationRequestDto(
-                id,
-                updatePlantationRequestDto.getName().orElse(null),
+                updatePlantationRequestDto.getName(),
                 updatePlantationRequestDto.getSizeArea().orElse(null),
                 updatePlantationRequestDto.getSoilType().orElse(null),
                 updatePlantationRequestDto.getSunlightIncidence().orElse(null)
@@ -47,13 +48,15 @@ class PlantationController {
         );
     }
 
-    @DeleteMapping("/{id}")
-    public void deletePlantation(@PathVariable UUID id) {
-        plantationService.deletePlantation(id);
+    @DeleteMapping("/{name}")
+    public void deletePlantation(@PathVariable String name) {
+        PlantationKey key = new PlantationKey(UserContext.getUserEmail(), name);
+        plantationService.deletePlantation(key);
     }
 
     @GetMapping("/plants")
-    public List<GetPlantResponseDto> listPlantsByPlantation(@RequestParam UUID plantationId) {
-        return plantService.listPlantsByPlantationId(plantationId);
+    public List<GetPlantResponseDto> listPlantsByPlantation(@RequestParam String plantationName) {
+        PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), plantationName);
+        return plantService.listPlantsByPlantationKey(plantationKey);
     }
 }
