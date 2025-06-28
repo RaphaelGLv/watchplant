@@ -1,10 +1,12 @@
 package com.watchplant.app.handlers;
 
 import com.watchplant.app.services.JwtService;
-import com.watchplant.app.services.exceptions.ApplicationException;
 import com.watchplant.app.utils.NonMvcResponseUtil;
 import com.watchplant.app.utils.UserContext;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -12,9 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -26,15 +26,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         return excludedPaths.stream().anyMatch(path::startsWith);
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
         String authHeader = request.getHeader("Authorization");
-        String jwtToken = null;
+        String jwtToken;
 
         try {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -48,9 +48,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
             NonMvcResponseUtil.createResponse(response, HttpStatus.UNAUTHORIZED, "Token expirado! Faça login novamente.");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
             NonMvcResponseUtil.createResponse(response, HttpStatus.UNAUTHORIZED, "Token inválido.");
+        } catch (Exception e) {
+            NonMvcResponseUtil.createResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar o token.");
         }
     }
 
