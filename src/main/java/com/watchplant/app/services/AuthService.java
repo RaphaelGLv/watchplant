@@ -8,7 +8,6 @@ import com.watchplant.app.dtos.auth.JwtTokenResponseDTO;
 import com.watchplant.app.entities.Address;
 import com.watchplant.app.entities.User;
 import com.watchplant.app.entities.UserAccount;
-import com.watchplant.app.repositories.AddressRepository;
 import com.watchplant.app.repositories.UserAccountRepository;
 import com.watchplant.app.repositories.UserRepository;
 import com.watchplant.app.services.exceptions.ApplicationException;
@@ -20,14 +19,12 @@ public class AuthService {
     private final UserRepository userRepository;
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncryptService passwordEncoder;
-    private final AddressRepository addressRepository;
     private final JwtService jwtService;
 
-    AuthService(UserRepository userRepository, UserAccountRepository userAccountRepository, PasswordEncryptService passwordEncoder, AddressRepository addressRepository, JwtService jwtService) {
+    AuthService(UserRepository userRepository, UserAccountRepository userAccountRepository, PasswordEncryptService passwordEncoder, JwtService jwtService) {
         this.userRepository = userRepository;
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
-        this.addressRepository = addressRepository;
         this.jwtService = jwtService;
     }
 
@@ -48,7 +45,7 @@ public class AuthService {
 
         userRepository.save(newUser);
 
-        return new JwtTokenResponseDTO(jwtService.generateToken(newUserAccount.getEmail()));
+        return new JwtTokenResponseDTO(jwtService.generateToken(newUser.getEmail()));
     }
 
     public JwtTokenResponseDTO login(LoginRequestDTO body) throws ApplicationException {
