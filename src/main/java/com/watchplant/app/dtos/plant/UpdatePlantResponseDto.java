@@ -1,41 +1,60 @@
 package com.watchplant.app.dtos.plant;
 
 import com.watchplant.app.entities.PlantedPlant;
+import com.watchplant.app.entities.keys.PlantedPlantKey;
+import com.watchplant.app.enums.SoilTypeEnum;
+import com.watchplant.app.enums.SunlightIncidenceEnum;
+import com.watchplant.app.enums.WateringFrequencyEnum;
 
 /**
  * DTO for the response of updating a {@link PlantedPlant}.
  * Contains the updated details of the plant.
  */
 public class UpdatePlantResponseDto {
+  private final PlantedPlantKey plantedPlantKey;
 
-  private String scientificName;
-  private String commonName;
+  private final WateringFrequencyEnum wateringFrequency;
+  private final SunlightIncidenceEnum sunlightIncidence;
+  private final SoilTypeEnum soilType;
+  private final String scientificName;
+  private final String commonName;
+  private final Integer quantity;
 
-  /**
-   * Constructor for {@link UpdatePlantResponseDto}.
-   *
-   * @param plantedPlant The updated {@link PlantedPlant}.
-   */
-  public UpdatePlantResponseDto(PlantedPlant plantedPlant) {
-    this.scientificName = plantedPlant.getScientificName();
-    this.commonName = plantedPlant.getCommonName();
+  public UpdatePlantResponseDto(PlantedPlant plant) {
+    plantedPlantKey = plant.getKey();
+    wateringFrequency = plant.getWateringFrequency();
+    sunlightIncidence = plant.getSunlightIncidence();
+    soilType = plant.getSoilType();
+    scientificName = plant.getScientificName();
+    commonName = plant.getCommonName();
+    quantity = plant.getQuantity();
   }
 
-  /**
-   * Gets the scientific name of the plant.
-   *
-   * @return The scientific name.
-   */
+  public PlantedPlantKey getPlantedPlantKey() {
+    return plantedPlantKey;
+  }
+
+  public WateringFrequencyEnum getWateringFrequency() {
+    return wateringFrequency;
+  }
+
+  public SunlightIncidenceEnum getSunlightIncidence() {
+    return sunlightIncidence;
+  }
+
+  public SoilTypeEnum getSoilType() {
+    return soilType;
+  }
+
   public String getScientificName() {
     return scientificName;
   }
 
-  /**
-   * Gets the common name of the plant.
-   *
-   * @return The common name.
-   */
   public String getCommonName() {
     return commonName;
+  }
+
+  public Integer getQuantity() {
+    return quantity;
   }
 }

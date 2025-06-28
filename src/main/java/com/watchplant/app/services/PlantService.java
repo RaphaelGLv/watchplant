@@ -50,7 +50,7 @@ public class PlantService {
   public GetPlantResponseDto getPlant(PlantedPlantKey plantedPlantKey) {
     PlantedPlant plantedPlant = plantedPlantRepository
       .findById(plantedPlantKey)
-      .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+      .orElseThrow(() -> new ApplicationException("Planta não encontrada.", HttpStatus.NOT_FOUND));
     return new GetPlantResponseDto(plantedPlant);
   }
 
@@ -120,26 +120,15 @@ public class PlantService {
     );
   }
 
-  /**
-   * Updates an existing plant.
-   *
-   * @param requestBody The request containing the updated plant details.
-   * @return {@link UpdatePlantResponseDto} containing the updated plant details.
-   * @throws IllegalArgumentException if the plant is not found.
-   */
   public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
     PlantedPlant plant = plantedPlantRepository
       .findById(requestBody.getPlantedPlantKey())
-      .orElseThrow(() -> new IllegalArgumentException("Plant not found"));
+      .orElseThrow(() -> new ApplicationException("Planta não encontrada.", HttpStatus.NOT_FOUND));
 
-    requestBody.getScientificName().ifPresent(plant::setScientificName);
-    requestBody.getCommonName().ifPresent(plant::setCommonName);
-    requestBody.getMaxFeetHeight().ifPresent(plant::setMaxFeetHeight);
-    requestBody.getCycle().ifPresent(plant::setCycle);
     requestBody.getWateringFrequency().ifPresent(plant::setWateringFrequency);
     requestBody.getSunlightIncidence().ifPresent(plant::setSunlightIncidence);
     requestBody.getSoilType().ifPresent(plant::setSoilType);
-    requestBody.getCareLevel().ifPresent(plant::setCareLevel);
+    requestBody.getQuantity().ifPresent(plant::setQuantity);
 
     plantedPlantRepository.save(plant);
     return new UpdatePlantResponseDto(plant);

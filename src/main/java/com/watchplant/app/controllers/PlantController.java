@@ -2,7 +2,6 @@ package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.plant.CreatePlantRequestDto;
 import com.watchplant.app.dtos.plant.CreatePlantResponseDto;
-import com.watchplant.app.dtos.plant.GetPlantRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantResponseDto;
 import com.watchplant.app.dtos.plant.UpdatePlantRequestDto;
 import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
@@ -50,26 +49,18 @@ class PlantController {
         return plantService.getPlant(key);
     }
 
-    @PutMapping("/{key}")
+    @PutMapping()
     public UpdatePlantResponseDto updatePlant(
-            @PathVariable PlantedPlantKey key,
-            @Valid @RequestBody UpdatePlantRequestDto updatePlantRequestDto
+            @RequestParam int perenualPlantId,
+            @RequestParam @DateTimeFormat LocalDateTime plantationDate,
+            @RequestParam String email,
+            @RequestParam String plantationName,
+            @Valid @RequestBody UpdatePlantRequestDto requestBody
+
     ) {
-        return plantService.updatePlant(
-            new UpdatePlantRequestDto(
-                key,
-                updatePlantRequestDto.getScientificName().orElse(null),
-                updatePlantRequestDto.getCommonName().orElse(null),
-                updatePlantRequestDto.getMaxFeetHeight().orElse(null),
-                updatePlantRequestDto.getCycle().orElse(null),
-                updatePlantRequestDto.getWateringFrequency().orElse(null),
-                updatePlantRequestDto.getSunlightIncidence().orElse(null),
-                updatePlantRequestDto.getPruningMonth().orElse(null),
-                updatePlantRequestDto.getPruningCountYearly().orElse(null),
-                updatePlantRequestDto.getSoilType().orElse(null),
-                updatePlantRequestDto.getCareLevel().orElse(null)
-            )
-        );
+        PlantedPlantKey key = new PlantedPlantKey(perenualPlantId, plantationDate, new PlantationKey(email, plantationName));
+        requestBody.setPlantedPlantKey(key);
+        return plantService.updatePlant(requestBody);
     }
 
     @DeleteMapping("/{key}")

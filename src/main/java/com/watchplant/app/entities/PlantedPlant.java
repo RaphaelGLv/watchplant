@@ -251,7 +251,11 @@ public class PlantedPlant {
         return quantity;
     }
 
-    public Integer getPruningAmount() {
+  public void setQuantity(Integer quantity) {
+    this.quantity = quantity;
+  }
+
+  public Integer getPruningAmount() {
         return pruningAmount;
     }
 
