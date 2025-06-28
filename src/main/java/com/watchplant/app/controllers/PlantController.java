@@ -56,15 +56,20 @@ class PlantController {
             @RequestParam String email,
             @RequestParam String plantationName,
             @Valid @RequestBody UpdatePlantRequestDto requestBody
-
     ) {
         PlantedPlantKey key = new PlantedPlantKey(perenualPlantId, plantationDate, new PlantationKey(email, plantationName));
         requestBody.setPlantedPlantKey(key);
         return plantService.updatePlant(requestBody);
     }
 
-    @DeleteMapping("/{key}")
-    public void deletePlant(@PathVariable PlantedPlantKey key) {
+    @DeleteMapping()
+    public void deletePlant(
+                            @RequestParam int perenualPlantId,
+                            @RequestParam @DateTimeFormat LocalDateTime plantationDate,
+                            @RequestParam String email,
+                            @RequestParam String plantationName
+    ) {
+        PlantedPlantKey key = new PlantedPlantKey(perenualPlantId, plantationDate, new PlantationKey(email, plantationName));
         plantService.deletePlant(key);
     }
 
