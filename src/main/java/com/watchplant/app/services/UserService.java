@@ -51,7 +51,9 @@ public class UserService {
         return new UpdateUserResponseDTO(user);
     }
 
-    public void deleteUser(String email) {
+    public void deleteUser() {
+        String email = UserContext.getUserEmail();
+
         if (!userRepository.existsById(email)) {
             throw new ApplicationException("Usuário não encontrado", HttpStatus.NOT_FOUND);
         }

@@ -44,9 +44,9 @@ class UserController {
         return userService.updateUser(updateUserRequestDTO);
     }
 
-    @DeleteMapping("/{email}")
-    public void deleteUser(@PathVariable String email) {
-        userService.deleteUser(email);
+    @DeleteMapping()
+    public void deleteUser() {
+        userService.deleteUser();
     }
 
     @GetMapping("/plantations")
