@@ -9,10 +9,14 @@ import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
 import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
 import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
+import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.services.PlantService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 
 @RestController
@@ -24,7 +28,7 @@ class PlantController {
         this.plantService = plantService;
     }
 
-    @PostMapping("/")
+    @PostMapping()
     CreatePlantResponseDto registerPlant(@Valid @RequestBody CreatePlantRequestDto createPlantRequestDto) {
         return plantService.createPlant(createPlantRequestDto);
     }
@@ -34,8 +38,15 @@ class PlantController {
         return plantService.getPlantingBestPractices(requestBody);
     }
 
-    @GetMapping("/{key}")
-    public GetPlantResponseDto getPlant(@PathVariable PlantedPlantKey key) {
+    @GetMapping()
+    public GetPlantResponseDto getPlant(
+            @RequestParam int perenualPlantId,
+            @RequestParam @DateTimeFormat LocalDateTime plantationDate,
+            @RequestParam String email,
+            @RequestParam String plantationName
+            ) {
+        PlantedPlantKey key = new PlantedPlantKey(perenualPlantId, plantationDate, new PlantationKey(email, plantationName));
+
         return plantService.getPlant(key);
     }
 
