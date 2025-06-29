@@ -4,8 +4,10 @@ import com.watchplant.app.dtos.plantation.*;
 import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.repositories.PlantationRepository;
+import com.watchplant.app.repositories.PlantedPlantRepository;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import com.watchplant.app.utils.UserContext;
+import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -21,14 +23,16 @@ import java.util.stream.Collectors;
 public class PlantationService {
 
   private final PlantationRepository plantationRepository;
+  private final PlantedPlantRepository plantedPlantRepository;
 
   /**
    * Constructor for PlantationService.
    *
    * @param plantationRepository The repository for Plantation entities.
    */
-  public PlantationService(PlantationRepository plantationRepository) {
+  public PlantationService(PlantationRepository plantationRepository, PlantedPlantRepository plantedPlantRepository) {
     this.plantationRepository = plantationRepository;
+    this.plantedPlantRepository = plantedPlantRepository;
   }
 
   /**
@@ -91,11 +95,15 @@ public class PlantationService {
     return new UpdatePlantationResponseDto(plantation);
   }
 
+  @Transactional
   public void deletePlantation(PlantationKey key) {
 
     if (!plantationRepository.existsById(key)) {
       throw new ApplicationException("Plantação não encontrada");
     }
+
+    plantedPlantRepository.deleteAllByKey_PlantationKey(key);
+
     plantationRepository.deleteById(key);
   }
 

@@ -14,6 +14,7 @@ import com.watchplant.app.interfaces.IWateringNeedParameter;
 public enum SoilTypeEnum implements IWateringNeedParameter {
   CLAY("Clay", NeedOfWaterEnum.LOW),
   LOAM("Loam", NeedOfWaterEnum.LOW),
+  BOG("Bog", NeedOfWaterEnum.LOW),
   PEAT("Peat", NeedOfWaterEnum.MEDIUM),
   HUMUS_ENRICHED("Humus Enriched", NeedOfWaterEnum.MEDIUM),
   SAND("Sand", NeedOfWaterEnum.HIGH),

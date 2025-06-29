@@ -16,4 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PlantedPlantRepository extends JpaRepository<PlantedPlant, PlantedPlantKey> {
     List<PlantedPlant> findAllByKey_PlantationKey(PlantationKey plantationKey);
+    void deleteAllByKey_PlantationKey(PlantationKey plantationKey);
 }

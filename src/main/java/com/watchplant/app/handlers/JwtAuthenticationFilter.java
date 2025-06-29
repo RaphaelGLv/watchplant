@@ -51,7 +51,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         } catch (MalformedJwtException | SignatureException | UnsupportedJwtException | IllegalArgumentException e) {
             NonMvcResponseUtil.createResponse(response, HttpStatus.UNAUTHORIZED, "Token inválido.");
         } catch (Exception e) {
-            NonMvcResponseUtil.createResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, "Erro ao processar o token.");
+            NonMvcResponseUtil.createResponse(response, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
