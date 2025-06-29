@@ -13,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public enum PlantCycleEnum {
   PERENNIAL("Perennial"),
   ANNUAL("Annual"),
-  BIENNIAL("Biennial");
+  BIENNIAL("Biennial"),
+  HERBACEOUS_PERENNIAL("Herbaceous Perennial");
 
   private final String type;
 
@@ -28,7 +29,7 @@ public enum PlantCycleEnum {
   @JsonCreator
   public static PlantCycleEnum fromString(String value) {
     try {
-      return PlantCycleEnum.valueOf(value.toUpperCase());
+      return PlantCycleEnum.valueOf(value.toUpperCase().trim().replace(" ", "_"));
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Invalid value for PlantCycleEnum: " + value);
     }

@@ -51,9 +51,9 @@ class PlantationController {
         plantationService.deletePlantation(key);
     }
 
-    @GetMapping("/plants")
-    public List<GetPlantResponseDto> listPlantsByPlantation(@RequestParam String plantationName) {
-        PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), plantationName);
+    @GetMapping("/plants/{name}")
+    public List<GetPlantResponseDto> listPlantsByPlantation(@PathVariable String name) {
+        PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), name);
         return plantService.listPlantsByPlantationKey(plantationKey);
     }
 }
