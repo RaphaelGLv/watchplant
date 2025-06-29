@@ -1,12 +1,11 @@
 package com.watchplant.app.controllers;
 
 import com.watchplant.app.dtos.notification.GetAllNotificationsResponseDTO;
+import com.watchplant.app.dtos.notification.GetNotificationResponseDto;
+import com.watchplant.app.dtos.notification.PatchNotificationSeenRequestDto;
 import com.watchplant.app.services.NotificationService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import com.watchplant.app.utils.UserContext;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/notification")
@@ -21,5 +20,10 @@ class NotificationController {
     GetAllNotificationsResponseDTO getNewNotifications() {
         notificationService.updateNotifications();
         return notificationService.getAllNotifications();
+    }
+
+    @PatchMapping("/seen")
+    GetNotificationResponseDto patchNotificationSeen(@RequestBody PatchNotificationSeenRequestDto requestBody) {
+        return notificationService.patchNotificationSeen(requestBody);
     }
 }

@@ -12,6 +12,7 @@ import com.watchplant.app.enums.NotificationTypeEnum;
 import com.watchplant.app.repositories.NotificationRepository;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 import com.watchplant.app.repositories.PlantationRepository;
@@ -43,10 +44,15 @@ public class NotificationService {
     List<Notification> notifications = notificationRepository.findAllByUserEmail(UserContext.getUserEmail());
 
     List<GetNotificationResponseDto> responseDtos = new ArrayList<>();
+    List<Notification> notificationsToDelete = new ArrayList<>();
     for (Notification notification : notifications) {
-      responseDtos.add(new GetNotificationResponseDto(notification));
+      if (notification.getSeenAt().isPresent() && ChronoUnit.DAYS.between(notification.getSeenAt().get(), LocalDateTime.now()) > 3)
+        notificationsToDelete.add(notification);
+      else
+        responseDtos.add(new GetNotificationResponseDto(notification));
     }
 
+    notificationRepository.deleteAll(notificationsToDelete);
     return new GetAllNotificationsResponseDTO(responseDtos);
   }
 
@@ -74,7 +80,7 @@ public class NotificationService {
                   plantedPlant.getKey(),
                   now,
                   String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" está em época de colheita!", plantedPlant.getCommonName(), plantation.getKey().getName()),
-                  false,
+                  null,
                   NotificationTypeEnum.HARVESTING
           );
           saveNotification(newHarvestingNotification);
@@ -86,7 +92,7 @@ public class NotificationService {
                   plantedPlant.getKey(),
                   now,
                   String.format("Atenção! A planta \"%s\" da sua plantação \"%s\" pode estar precisando ser regada!", plantedPlant.getCommonName(), plantation.getKey().getName()),
-                  false,
+                  null,
                   NotificationTypeEnum.WATERING
           );
           saveNotification(newWateringNotification);
@@ -98,9 +104,27 @@ public class NotificationService {
 
   private void saveNotification(Notification notification) {
     try {
-      notificationRepository.save(notification);
+      if (!notificationRepository.existsById(notification.getKey())) {
+        notificationRepository.save(notification);
+      }
     } catch (Exception e) {
       throw new ApplicationException("Erro ao criar notificação", HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+
+  public GetNotificationResponseDto patchNotificationSeen(PatchNotificationSeenRequestDto requestBody) {
+    if (!requestBody.key().getPlantedPlantKey().getPlantationKey().getUserEmail().equals(UserContext.getUserEmail()))
+      throw new ApplicationException("Usuário não autorizado", HttpStatus.UNAUTHORIZED);
+
+    Optional<Notification> notification = notificationRepository.findById(requestBody.key());
+
+    if (notification.isEmpty())
+      throw new ApplicationException("Notificação não encontrada", HttpStatus.NOT_FOUND);
+
+    notification.get().setSeenAt(requestBody.seenAt());
+    notificationRepository.save(notification.get());
+
+    return new GetNotificationResponseDto(notification.get());
   }
 }

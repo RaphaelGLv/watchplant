@@ -9,6 +9,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 /**
@@ -26,29 +27,21 @@ public class Notification {
 
   private LocalDateTime creationDate;
   private String message;
-  private boolean isSeen;
+  private LocalDateTime seenAt;
 
-  /**
-   * Constructor for Notification
-   * @param creationDate The creation date of the notification
-   * @param message The message of the notification
-   * @param isSeen Whether the notification has been seen
-   * @param type The type of the notification
-   * @throws IllegalArgumentException if creationDate or message is null, or if message is empty
-   */
   public Notification(
           String userEmail,
           PlantedPlantKey plantedPlantKey,
           LocalDateTime creationDate,
           String message,
-          boolean isSeen,
+          LocalDateTime seenAt,
           NotificationTypeEnum type
   ) {
     this.userEmail = userEmail;
     this.key = new NotificationKey(plantedPlantKey, type);
     this.creationDate = creationDate;
     this.message = message;
-    this.isSeen = isSeen;
+    this.seenAt = seenAt;
   }
 
   public Notification() {
@@ -102,22 +95,6 @@ public class Notification {
   }
 
   /**
-   * Checks if the notification has been seen
-   * @return True if the notification has been seen, false otherwise
-   */
-  public boolean isSeen() {
-    return isSeen;
-  }
-
-  /**
-   * Sets the seen status of the notification
-   * @param isSeen Whether the notification has been seen
-   */
-  public void setSeen(boolean isSeen) {
-    this.isSeen = isSeen;
-  }
-
-  /**
    * Gets the type of the notification
    * @return The type of the notification
    */
@@ -125,7 +102,15 @@ public class Notification {
     return this.key.getType();
   }
 
-    public String getUserEmail() {
-        return userEmail;
-    }
+  public String getUserEmail() {
+      return userEmail;
+  }
+
+  public Optional<LocalDateTime> getSeenAt() {
+      return Optional.ofNullable(seenAt);
+  }
+
+  public void setSeenAt(LocalDateTime seenAt) {
+    this.seenAt = seenAt;
+  }
 }
