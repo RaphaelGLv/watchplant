@@ -56,7 +56,7 @@ public class NotificationService {
     return new GetAllNotificationsResponseDTO(responseDtos);
   }
 
-  public void updateNotifications() {
+  public void searchForNewNotifications() {
     List<Plantation> userPlantationList = plantationRepository.findAllByKey_userEmail(UserContext.getUserEmail());
 
     HashMap<Plantation, List<PlantedPlant>> plantationPlantsMap = new HashMap<>();

@@ -4,7 +4,6 @@ import com.watchplant.app.dtos.notification.GetAllNotificationsResponseDTO;
 import com.watchplant.app.dtos.notification.GetNotificationResponseDto;
 import com.watchplant.app.dtos.notification.PatchNotificationSeenRequestDto;
 import com.watchplant.app.services.NotificationService;
-import com.watchplant.app.utils.UserContext;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +17,7 @@ class NotificationController {
 
     @GetMapping("/new")
     GetAllNotificationsResponseDTO getNewNotifications() {
-        notificationService.updateNotifications();
+        notificationService.searchForNewNotifications();
         return notificationService.getAllNotifications();
     }
 
