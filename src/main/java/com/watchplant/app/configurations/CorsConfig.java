@@ -15,7 +15,7 @@ public class CorsConfig {
       public void addCorsMappings(CorsRegistry registry) {
         registry
           .addMapping("/**")
-          .allowedOrigins("http://localhost:3000")
+          .allowedOrigins("http://localhost:3000", "https://watchplant-front.vercel.app")
           .allowedMethods("GET", "POST", "PATCH", "PUT", "DELETE")
           .allowedHeaders("Authorization", "Content-Type")
           .allowCredentials(true);
