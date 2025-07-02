@@ -9,8 +9,8 @@ import java.util.Objects;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.watchplant.app.dtos.plant.PerenualPlantDetailsDto;
-import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
+import com.watchplant.app.dtos.plantedPlant.PerenualPlantDetailsDto;
+import com.watchplant.app.dtos.plantedPlant.PerenualPlantSearchResponseDto;
 import com.watchplant.app.services.exceptions.ApplicationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

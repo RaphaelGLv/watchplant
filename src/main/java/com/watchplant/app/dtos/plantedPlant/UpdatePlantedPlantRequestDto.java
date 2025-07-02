@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.entities.keys.PlantedPlantKey;
 import com.watchplant.app.enums.*;
@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.Optional;
 
-public class UpdatePlantRequestDto {
+public class UpdatePlantedPlantRequestDto {
 
   private PlantedPlantKey plantedPlantKey;
 
@@ -18,7 +18,7 @@ public class UpdatePlantRequestDto {
   @Min(value = 1, message = "A quantidade de plantas deve ser maior ou igual a 1")
   private Integer quantity;
 
-  public UpdatePlantRequestDto(
+  public UpdatePlantedPlantRequestDto(
     PlantedPlantKey plantedPlantKey,
     WateringFrequencyEnum wateringFrequency,
     SunlightIncidenceEnum sunlightIncidence,

@@ -1,6 +1,6 @@
 package com.watchplant.app.services;
 
-import com.watchplant.app.dtos.plant.*;
+import com.watchplant.app.dtos.plantedPlant.*;
 import com.watchplant.app.entities.Plantation;
 import com.watchplant.app.entities.PlantedPlant;
 import com.watchplant.app.entities.keys.PlantationKey;
@@ -22,7 +22,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -30,37 +29,37 @@ import java.util.stream.Collectors;
  * Provides methods for creating, fetching, and updating plants.
  */
 @Service
-public class PlantService {
+public class PlantedPlantService {
 
   private final PlantedPlantRepository plantedPlantRepository;
   private final PlantationRepository plantationRepository;
   private final PerenualService perenualService;
 
   /**
-   * Constructor for {@link PlantService}.
+   * Constructor for {@link PlantedPlantService}.
    *
    * @param plantedPlantRepository The repository for {@link PlantedPlant} entities.
    */
-  public PlantService(PlantedPlantRepository plantedPlantRepository, PlantationRepository plantationRepository, PerenualService perenualService) {
+  public PlantedPlantService(PlantedPlantRepository plantedPlantRepository, PlantationRepository plantationRepository, PerenualService perenualService) {
     this.plantedPlantRepository = plantedPlantRepository;
       this.plantationRepository = plantationRepository;
       this.perenualService = perenualService;
   }
 
-  public GetPlantResponseDto getPlant(PlantedPlantKey plantedPlantKey) {
+  public GetPlantedPlantResponseDto getPlant(PlantedPlantKey plantedPlantKey) {
     PlantedPlant plantedPlant = plantedPlantRepository
       .findById(plantedPlantKey)
       .orElseThrow(() -> new ApplicationException("Planta não encontrada.", HttpStatus.NOT_FOUND));
-    return new GetPlantResponseDto(plantedPlant);
+    return new GetPlantedPlantResponseDto(plantedPlant);
   }
 
   /**
    * Creates a new plant.
    *
    * @param requestBody The request containing the plant details.
-   * @return {@link CreatePlantResponseDto} containing the created plant details.
+   * @return {@link CreatePlantedPlantResponseDto} containing the created plant details.
    */
-  public CreatePlantResponseDto createPlant(CreatePlantRequestDto requestBody) {
+  public CreatePlantedPlantResponseDto createPlant(CreatePlantedPlantRequestDto requestBody) {
     PerenualPlantDetailsDto plantDetails = perenualService.getPlantDetails(requestBody.getPlantId());
     List<Dimensions> plantDimensions = plantDetails.getDimensions();
 
@@ -88,7 +87,7 @@ public class PlantService {
     );
 
     plantedPlantRepository.save(newPlantedPlant);
-    return new CreatePlantResponseDto(newPlantedPlant);
+    return new CreatePlantedPlantResponseDto(newPlantedPlant);
   }
 
   public GetPlantingBestPracticesResponseDto getPlantingBestPractices(GetPlantingBestPracticesRequestDto requestBody) {
@@ -120,7 +119,7 @@ public class PlantService {
     );
   }
 
-  public UpdatePlantResponseDto updatePlant(UpdatePlantRequestDto requestBody) {
+  public UpdatePlantedPlantResponseDto updatePlant(UpdatePlantedPlantRequestDto requestBody) {
     PlantedPlant plant = plantedPlantRepository
       .findById(requestBody.getPlantedPlantKey())
       .orElseThrow(() -> new ApplicationException("Planta não encontrada.", HttpStatus.NOT_FOUND));
@@ -131,7 +130,7 @@ public class PlantService {
     requestBody.getQuantity().ifPresent(plant::setQuantity);
 
     plantedPlantRepository.save(plant);
-    return new UpdatePlantResponseDto(plant);
+    return new UpdatePlantedPlantResponseDto(plant);
   }
 
   /**
@@ -144,14 +143,14 @@ public class PlantService {
     plantedPlantRepository.deleteById(plantedPlantKey);
   }
 
-  public List<GetPlantResponseDto> listPlantsByPlantationKey(PlantationKey plantationKey) {
+  public List<GetPlantedPlantResponseDto> listPlantsByPlantationKey(PlantationKey plantationKey) {
     boolean owns = plantationRepository.existsById(plantationKey);
     if (!owns) {
       throw new ApplicationException("Plantação não encontrada", HttpStatus.NOT_FOUND);
     }
     return plantedPlantRepository.findAll().stream()
       .filter(plant -> plantationKey.equals(plant.getKey().getPlantationKey()))
-      .map(GetPlantResponseDto::new)
+      .map(GetPlantedPlantResponseDto::new)
       .collect(Collectors.toList());
   }
 

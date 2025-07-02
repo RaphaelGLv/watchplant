@@ -1,16 +1,16 @@
 package com.watchplant.app.controllers;
 
-import com.watchplant.app.dtos.plant.CreatePlantRequestDto;
-import com.watchplant.app.dtos.plant.CreatePlantResponseDto;
-import com.watchplant.app.dtos.plant.GetPlantResponseDto;
-import com.watchplant.app.dtos.plant.UpdatePlantRequestDto;
-import com.watchplant.app.dtos.plant.UpdatePlantResponseDto;
-import com.watchplant.app.dtos.plant.PerenualPlantSearchResponseDto;
-import com.watchplant.app.dtos.plant.GetPlantingBestPracticesRequestDto;
-import com.watchplant.app.dtos.plant.GetPlantingBestPracticesResponseDto;
+import com.watchplant.app.dtos.plantedPlant.CreatePlantedPlantRequestDto;
+import com.watchplant.app.dtos.plantedPlant.CreatePlantedPlantResponseDto;
+import com.watchplant.app.dtos.plantedPlant.GetPlantedPlantResponseDto;
+import com.watchplant.app.dtos.plantedPlant.GetPlantingBestPracticesRequestDto;
+import com.watchplant.app.dtos.plantedPlant.GetPlantingBestPracticesResponseDto;
+import com.watchplant.app.dtos.plantedPlant.PerenualPlantSearchResponseDto;
+import com.watchplant.app.dtos.plantedPlant.UpdatePlantedPlantRequestDto;
+import com.watchplant.app.dtos.plantedPlant.UpdatePlantedPlantResponseDto;
 import com.watchplant.app.entities.keys.PlantationKey;
 import com.watchplant.app.entities.keys.PlantedPlantKey;
-import com.watchplant.app.services.PlantService;
+import com.watchplant.app.services.PlantedPlantService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -20,15 +20,15 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/plant")
-class PlantController {
-    private final PlantService plantService;
+class PlantedPlantController {
+    private final PlantedPlantService plantService;
 
-    PlantController(PlantService plantService) {
+    PlantedPlantController(PlantedPlantService plantService) {
         this.plantService = plantService;
     }
 
     @PostMapping()
-    CreatePlantResponseDto registerPlant(@Valid @RequestBody CreatePlantRequestDto createPlantRequestDto) {
+    CreatePlantedPlantResponseDto registerPlant(@Valid @RequestBody CreatePlantedPlantRequestDto createPlantRequestDto) {
         return plantService.createPlant(createPlantRequestDto);
     }
 
@@ -38,7 +38,7 @@ class PlantController {
     }
 
     @GetMapping()
-    public GetPlantResponseDto getPlant(
+    public GetPlantedPlantResponseDto getPlant(
             @RequestParam int perenualPlantId,
             @RequestParam @DateTimeFormat LocalDateTime plantationDate,
             @RequestParam String email,
@@ -50,12 +50,12 @@ class PlantController {
     }
 
     @PutMapping()
-    public UpdatePlantResponseDto updatePlant(
+    public UpdatePlantedPlantResponseDto updatePlant(
             @RequestParam int perenualPlantId,
             @RequestParam @DateTimeFormat LocalDateTime plantationDate,
             @RequestParam String email,
             @RequestParam String plantationName,
-            @Valid @RequestBody UpdatePlantRequestDto requestBody
+            @Valid @RequestBody UpdatePlantedPlantRequestDto requestBody
     ) {
         PlantedPlantKey key = new PlantedPlantKey(perenualPlantId, plantationDate, new PlantationKey(email, plantationName));
         requestBody.setPlantedPlantKey(key);

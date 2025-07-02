@@ -1,9 +1,9 @@
 package com.watchplant.app.controllers;
 
-import com.watchplant.app.dtos.plant.GetPlantResponseDto;
 import com.watchplant.app.dtos.plantation.*;
+import com.watchplant.app.dtos.plantedPlant.GetPlantedPlantResponseDto;
 import com.watchplant.app.entities.keys.PlantationKey;
-import com.watchplant.app.services.PlantService;
+import com.watchplant.app.services.PlantedPlantService;
 import com.watchplant.app.services.PlantationService;
 import com.watchplant.app.utils.UserContext;
 import jakarta.validation.Valid;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/plantation")
 class PlantationController {
     private final PlantationService plantationService;
-    private final PlantService plantService;
+    private final PlantedPlantService plantedPlantService;
 
-    PlantationController(PlantationService plantationService, PlantService plantService) {
+    PlantationController(PlantationService plantationService, PlantedPlantService plantedPlantService) {
         this.plantationService = plantationService;
-        this.plantService = plantService;
+        this.plantedPlantService = plantedPlantService;
     }
 
     @PostMapping()
@@ -52,8 +52,8 @@ class PlantationController {
     }
 
     @GetMapping("/plants/{name}")
-    public List<GetPlantResponseDto> listPlantsByPlantation(@PathVariable String name) {
+    public List<GetPlantedPlantResponseDto> listPlantsByPlantation(@PathVariable String name) {
         PlantationKey plantationKey = new PlantationKey(UserContext.getUserEmail(), name);
-        return plantService.listPlantsByPlantationKey(plantationKey);
+        return plantedPlantService.listPlantsByPlantationKey(plantationKey);
     }
 }

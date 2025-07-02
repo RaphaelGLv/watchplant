@@ -1,13 +1,13 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.entities.keys.PlantedPlantKey;
 
 
-public class GetPlantRequestDto {
+public class GetPlantedPlantRequestDto {
 
   private PlantedPlantKey key;
 
-  public GetPlantRequestDto(PlantedPlantKey key) {
+  public GetPlantedPlantRequestDto(PlantedPlantKey key) {
     this.key = key;
   }
   public PlantedPlantKey getKey() {

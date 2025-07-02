@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.entities.PlantedPlant;
 import com.watchplant.app.enums.*;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.NotNull;
  * DTO for creating a {@link PlantedPlant]}.
  * Contains the required fields for creating a new plant.
  */
-public class CreatePlantRequestDto {
+public class CreatePlantedPlantRequestDto {
 
   @NotNull(message = "A planta é um campo obrigatório")
   @Min(value = 1, message = "O id da planta deve ser maior ou igual a 1")

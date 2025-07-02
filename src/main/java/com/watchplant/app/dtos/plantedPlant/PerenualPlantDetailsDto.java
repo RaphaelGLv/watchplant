@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;

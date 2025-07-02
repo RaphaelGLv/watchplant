@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.entities.PlantedPlant;
 import com.watchplant.app.entities.keys.PlantedPlantKey;
@@ -9,7 +9,7 @@ import java.util.UUID;
  * DTO for the response of creating a {@link PlantedPlant}.
  * Contains the details of the created plant.
  */
-public class CreatePlantResponseDto {
+public class CreatePlantedPlantResponseDto {
 
   private final PlantedPlantKey key;
   private final String scientificName;
@@ -17,11 +17,11 @@ public class CreatePlantResponseDto {
   private final Integer quantity;
 
   /**
-   * Constructor for {@link CreatePlantResponseDto}.
+   * Constructor for {@link CreatePlantedPlantResponseDto}.
    *
    * @param plantedPlant The created {@link PlantedPlant}.
    */
-  public CreatePlantResponseDto(PlantedPlant plantedPlant) {
+  public CreatePlantedPlantResponseDto(PlantedPlant plantedPlant) {
     this.key = plantedPlant.getKey();
     this.scientificName = plantedPlant.getScientificName();
     this.commonName = plantedPlant.getCommonName();

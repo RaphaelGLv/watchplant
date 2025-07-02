@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.entities.PlantedPlant;
 import com.watchplant.app.entities.keys.PlantedPlantKey;
@@ -7,10 +7,10 @@ import com.watchplant.app.enums.SunlightIncidenceEnum;
 import com.watchplant.app.enums.WateringFrequencyEnum;
 
 /**
- * DTO for the response of fetching a {@link PlantedPlant}.
- * Contains the details of the fetched plant.
+ * DTO for the response of updating a {@link PlantedPlant}.
+ * Contains the updated details of the plant.
  */
-public class GetPlantResponseDto {
+public class UpdatePlantedPlantResponseDto {
   private final PlantedPlantKey plantedPlantKey;
 
   private final WateringFrequencyEnum wateringFrequency;
@@ -20,7 +20,7 @@ public class GetPlantResponseDto {
   private final String commonName;
   private final Integer quantity;
 
-  public GetPlantResponseDto(PlantedPlant plant) {
+  public UpdatePlantedPlantResponseDto(PlantedPlant plant) {
     plantedPlantKey = plant.getKey();
     wateringFrequency = plant.getWateringFrequency();
     sunlightIncidence = plant.getSunlightIncidence();

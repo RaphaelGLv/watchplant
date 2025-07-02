@@ -1,4 +1,4 @@
-package com.watchplant.app.dtos.plant;
+package com.watchplant.app.dtos.plantedPlant;
 
 import com.watchplant.app.enums.SoilTypeEnum;
 import com.watchplant.app.enums.SunlightIncidenceEnum;
